@@ -11,7 +11,7 @@
     }
 
     .card {
-        width: 40% !important;
+        min-width: 40% !important;
         background-color: #454D55 !important;
         color: #FFFF;
     }

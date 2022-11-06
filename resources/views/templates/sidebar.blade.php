@@ -59,7 +59,7 @@
                     </ul>
                 </li> --}}
                 <li class="nav-item">
-                    <a href="/" class="nav-link">
+                    <a href="/home" class="nav-link">
                         <i class="fas fa-home"></i>
                         <p>
                             Home
@@ -67,7 +67,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/user" class="nav-link">
+                    <a href="{{ route('users.index') }}" class="nav-link">
                         <i class="fas fa-user"></i>
                         <p>
                             Users
@@ -81,11 +81,3 @@
 
 </aside>
 {{-- Right Aside --}}
-<aside class="control-sidebar control-sidebar-dark">
-
-    <div class="p-3">
-        <h5></h5>
-        <p>User</p>
-        <button type="button" class="btn btn-block btn-danger">Logout</button>
-    </div>
-</aside>
