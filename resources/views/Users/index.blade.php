@@ -1,4 +1,4 @@
-@extends('layout.main', ['title' => 'Users', 'subtitle' => 'User List'])
+@extends('layout.main', ['title' => 'Pengguna', 'subtitle' => 'Daftar Pengguna'])
 
 @section('style-head')
 <style>
@@ -23,7 +23,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Data User</h3>
+                    <h3 class="card-title">Data Pengguna</h3>
                 </div>
 
                 <div class="card-body">
@@ -116,7 +116,7 @@
                                                 Nama Pengguna</th>
                                             <th tabindex="0" rowspan="1" colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
-                                                SuperAdmin
+                                                Super Admin
                                             </th>
                                             <th tabindex="0" rowspan="1" colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
@@ -137,7 +137,7 @@
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->username }}</td>
                                             <td>
-                                                {{ $user->is_super_admin == 1 ? "Yes" : "No" }}
+                                                {{ $user->is_super_admin == 1 ? "Ya" : "Tidak" }}
 
 
                                             </td>
@@ -337,7 +337,8 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus'
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
                     var username = $('.get-username').val();
@@ -378,7 +379,8 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Ubah'
+                confirmButtonText: 'Ubah',
+                cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -423,14 +425,10 @@
                                 title: 'Gagal!',
                                 text: error.responseJSON.message,
                             })
-                            // console.log(error.responseJSON.username);
                             $('.error-edit-name').text(error.responseJSON
                                 .name).css('display', '');
                             $('.error-edit-username').text(error.responseJSON
                                 .username).css('display', '');
-                            // console.log(error.responseJSON.hasOwnProperty(
-                            //     "old_password"));
-                            // if (error.responseJSON.hasOwnProperty("old_password")) {
                             $('.error-edit-old-password').text(error.responseJSON
                                 .old_password).css('display', '');
                             $('.error-edit-password').text(error.responseJSON
@@ -438,8 +436,6 @@
                             $('.error-edit-password-confirm').text(error
                                 .responseJSON
                                 .password_confirmation).css('display', '');
-                            // }
-                            // $('#error-image').css('display', '');
                         },
 
                     });
@@ -457,7 +453,8 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Tambah'
+                confirmButtonText: 'Tambah',
+                cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({

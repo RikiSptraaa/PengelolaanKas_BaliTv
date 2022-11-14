@@ -69,7 +69,7 @@
                     <a href="{{ route('users.index') }}" class="nav-link">
                         <i class="fas fa-user"></i>
                         <p>
-                            Users
+                            Pengguna
                         </p>
                     </a>
                 </li>
