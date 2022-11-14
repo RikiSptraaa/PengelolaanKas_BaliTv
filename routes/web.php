@@ -36,6 +36,7 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('/register', [RegisterController::class, 'store'])->name('register');
 });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
-
-Route::resource('/users', UsersController::class);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::resource('/users', UsersController::class)->middleware('SuperAdmin');
+});

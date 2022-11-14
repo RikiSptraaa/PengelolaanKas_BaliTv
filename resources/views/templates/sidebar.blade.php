@@ -1,12 +1,12 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
-<div style="display: flex; justify-content: center">
-    <a href="index3.html">
-        <img src="{{ asset('storage/img/bali-tv.png') }}" alt="AdminLTE Logo" class="brand-image"
-        style="opacity: .8; justify-content: center; width: 75px; height: 75px;">
-        {{-- <span class="brand-text font-weight-light">Bali Tv</span> --}}
-    </a>
-</div>
+    <div style="display: flex; justify-content: center">
+        <a href="index3.html">
+            <img src="{{ asset('storage/img/bali-tv.png') }}" alt="AdminLTE Logo" class="brand-image"
+                style="opacity: .8; justify-content: center; width: 75px; height: 75px;">
+            {{-- <span class="brand-text font-weight-light">Bali Tv</span> --}}
+        </a>
+    </div>
 
     <div class="sidebar">
 
@@ -21,8 +21,7 @@
 
         <div class="form-inline">
             <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                    aria-label="Search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
                     <button class="btn btn-sidebar">
                         <i class="fas fa-search fa-fw"></i>
@@ -32,8 +31,7 @@
         </div>
 
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                 {{-- <li class="nav-item menu-open">
                     <a href="#" class="nav-link active">
@@ -66,6 +64,7 @@
                         </p>
                     </a>
                 </li>
+                @if(Auth::user()->is_super_admin == 1)
                 <li class="nav-item">
                     <a href="{{ route('users.index') }}" class="nav-link">
                         <i class="fas fa-user"></i>
@@ -74,6 +73,7 @@
                         </p>
                     </a>
                 </li>
+                @endif
             </ul>
         </nav>
 

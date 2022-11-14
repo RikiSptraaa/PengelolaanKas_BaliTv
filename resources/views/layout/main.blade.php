@@ -5,6 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
     <title>Bali TV</title>
     @include('templates.header')
     @yield('style-head')
@@ -21,7 +23,7 @@
 
         <div class="content-wrapper">
 
-             <div class="content-header">
+            <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
@@ -47,7 +49,7 @@
             <div class="float-right d-none d-sm-inline">
                 Anything you want
             </div>
-        
+
             <strong> &copy; 2022 <a href="https://balitv.tv/">Bali TV</a>.</strong>
         </footer>
 
@@ -66,17 +68,27 @@
 
 
     {{-- <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script> --}}
-    
+
     <script src="{{ asset('Admin-Lte/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('Admin-Lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 
     <script src="{{ asset('Admin-Lte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     <script src="{{ asset('Admin-Lte/dist/js/adminlte.min.js?v=3.2.0') }}"></script>
     <script src="{{ asset('Admin-Lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
+    <script src="{{ asset('Admin-Lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('Admin-Lte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('Admin-Lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('Admin-Lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('Admin-Lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('Admin-Lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('Admin-Lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('Admin-Lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
     @yield('script')
 
-    
+
 </body>
 
 </html>
