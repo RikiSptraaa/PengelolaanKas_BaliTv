@@ -62,7 +62,7 @@ class UsersController extends Controller
                 'password' => $validator->errors()->get('password'),
                 'password_confirmation' => $validator->errors()->get('password_confirmation'),
                 'status' => false,
-                'message' => "Data Gagal Diubah!"
+                'message' => "Data Gagal Ditambah!"
             ], 422);
         } else {
             // MCompany::where('parent_id', 0)->update([
