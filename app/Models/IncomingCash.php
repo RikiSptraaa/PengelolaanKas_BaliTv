@@ -8,13 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class IncomingCash extends Model
 {
     use HasFactory;
-    protected $table = 'incoming_cash';
-    protected $guarded = ['id'];
+
 
     public function getRouteKeyName()
     {
         return 'invoice_number';
     }
+    protected $table = 'incoming_cash';
+    protected $guarded = ['id'];
+    protected $fillable = [
+        'invoice_number',
+        'user_id',
+        'client',
+        'paid_date',
+        'total',
+        'note'
+
+    ];
+
 
     public function User()
     {

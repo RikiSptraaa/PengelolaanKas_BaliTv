@@ -80,9 +80,11 @@ class IncomingCashController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(IncomingCash $penerimaan_ka)
     {
-        //
+        return response()->json([
+            'data' => $penerimaan_ka->toArray(),
+        ]);
     }
 
     /**
@@ -103,9 +105,51 @@ class IncomingCashController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, IncomingCash $penerimaan_ka)
     {
-        //
+        if ($request->nomor_invoice == $penerimaan_ka->invoice_number) {
+
+            $validator = Validator::make($request->all(), [
+                'nomor_invoice' => 'required|max:50',
+                'client' => 'required|max:50',
+                'tanggal_bayar' => 'date|required',
+                'jumlah' => 'numeric|required',
+                'keterangan' => 'required|max:100'
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'nomor_invoice' => 'required|unique:incoming_cash,invoice_number|max:50',
+                'client' => 'required|max:50',
+                'tanggal_bayar' => 'date|required',
+                'jumlah' => 'numeric|required',
+                'keterangan' => 'required|max:100'
+            ]);
+        }
+
+        if ($validator->fails()) {
+            return response()->json([
+                'nomor_invoice' => $validator->errors()->get('nomor_invoice'),
+                'client' => $validator->errors()->get('client'),
+                'tanggal_bayar' => $validator->errors()->get('tanggal_bayar'),
+                'jumlah' => $validator->errors()->get('jumlah'),
+                'keterangan' => $validator->errors()->get('keterangan'),
+                'status' => false,
+                'message' => "Penerimaan Kas Gagal Ditambah!"
+            ], 422);
+        }
+
+        $penerimaan_ka->update([
+            'invoice_number' => $request->nomor_invoice,
+            'client' => $request->client,
+            'paid_date' => $request->tanggal_bayar,
+            'total' => $request->jumlah,
+            'note' => $request->keterangan,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => "Penerimaan Kas Berhasil Diubah!"
+        ]);
     }
 
     /**
@@ -114,8 +158,14 @@ class IncomingCashController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(IncomingCash $penerimaan_ka)
     {
-        //
+        $penerimaan_ka->delete();
+        // dd($incomingCash);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Penerimaan Kas Berhasil Dihapus!'
+        ]);
     }
 }
