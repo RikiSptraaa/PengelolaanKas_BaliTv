@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\IncomingCash;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
 class IncomingCashController extends Controller
@@ -16,9 +16,16 @@ class IncomingCashController extends Controller
      */
     public function index()
     {
-        $data = IncomingCash::latest()->paginate(10);
-
-        return view('PenerimaanKas.index', compact('data'));
+        $request = request()->all();
+        $data = IncomingCash::latest();
+        if (Request::input('search')) {
+            $data =  $data->where('invoice_number', 'LIKE', '%' . request()->search . '%')->orWhere('client', 'LIKE', '%' . request()->search . '%');
+        }
+        if (Request::input('date')) {
+            $data =  $data->where('paid_date', '=', request()->date);
+        }
+        $data = $data->paginate(10);
+        return view('PenerimaanKas.index', compact('data'))->with('request');
     }
 
     /**

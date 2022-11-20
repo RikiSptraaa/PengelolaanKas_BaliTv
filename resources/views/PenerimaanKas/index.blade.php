@@ -28,16 +28,23 @@
                 <div class="card-body">
                     <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
-                            <div class="col-sm-12 col-md-6 justify-content-start d-flex">
-                                <div id="example1_filter" class="dataTables_filter ">
+                            <div class="col-sm-12 col-md-8 justify-content-start justify-content-sm-start d-flex">
+                                <div id="example1_filter">
                                     <form action="" method="get">
-                                        <label>Cari:<input type="search" name="search"
-                                                class="form-control form-control-sm" placeholder=""
+    
+                                        <label class="mr-3">Cari:<input type="text" name="search"
+                                                value="{{ request()->search ? request()->search : "" }}" class="form-control form-control-sm"
                                                 aria-controls="example1"></label>
+                                        <label class="mr-1">Tanggal:<input type="date" name="date"
+                                                value="{{ request()->date ? request()->date : "" }}" class="form-control form-control-sm"
+                                                aria-controls="example1"></label>
+                                        <a href="{{ route('penerimaan-kas.index') }}" class="btn btn-sm btn-secondary">
+                                            Reset </a>
                                 </div>
                                 </form>
                             </div>
-                            <div class="col-sm-12 col-md-6 justify-content-md-end mb-3 d-flex justify-content-sm-start">
+                            <div
+                                class="mt-2 col-sm-12 col-md-4 justify-content-md-end d-flex justify-content-sm-start align-items-center">
                                 <button class="btn btn-secondary buttons-html5" data-toggle="modal"
                                     data-target="#modal-tambah">Tambah Penerimaan Kas +</button>
 
