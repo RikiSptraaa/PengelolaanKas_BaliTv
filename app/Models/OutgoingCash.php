@@ -11,4 +11,9 @@ class OutgoingCash extends Model
     protected $table = 'outgoing_cash';
 
     protected $guarded = ['id'];
+
+    public function getRouteKeyName()
+    {
+        return "note_number";
+    }
 }

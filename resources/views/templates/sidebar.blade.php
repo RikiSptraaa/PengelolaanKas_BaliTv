@@ -74,6 +74,14 @@
                     </a>
                 </li>
                 @endif
+                <li class="nav-item">
+                    <a href="/pengeluaran-kas" class="nav-link">
+                        <i class="fas fa-cash-register"></i>
+                        <p>
+                            Pengeluaran Kas
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
 
