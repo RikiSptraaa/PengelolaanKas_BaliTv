@@ -17,6 +17,7 @@
 </style>
 @endsection
 @section('content')
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -82,7 +83,7 @@
                                         <tr>
                                             <td>{{ $value->invoice_number }}</td>
                                             <td>{{ $value->client }}</td>
-                                            <td>{{ $value->paid_date }}</td>
+                                            <td>{{  Carbon::parse($value->paid_date)->dayName .', ' .Carbon::parse($value->paid_date)->format('d F Y') }}</td>
                                             <td>{{ $value->total }}</td>
                                             <td>{{ $value->note }}</td>
                                             <td class='d-flex justify-content-center'>
