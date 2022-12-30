@@ -7,7 +7,9 @@ use App\Http\Controllers\auth\LogoutController;
 use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\auth\AuthenticateController;
 use App\Http\Controllers\OutgoingCashController;
+use App\Http\Controllers\IncomingCashController;
 use App\Http\Controllers\UsersController;
+use App\Models\IncomingCash;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,4 +43,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('/users', UsersController::class)->middleware('SuperAdmin');
     Route::resource('/pengeluaran-kas', OutgoingCashController::class);
+    Route::resource('/penerimaan-kas', IncomingCashController::class);
 });
