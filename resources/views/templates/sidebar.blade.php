@@ -78,12 +78,24 @@
                 </li>
                 @endif
                 <li class="nav-item">
-                    <a href="{{ route('penerimaan-kas.index') }}" class="nav-link">
+
+                    <a href="/pengeluaran-kas" class="nav-link">
+                        <i class="fas fa-cash-register"></i>
+                        <p>
+                            Pengeluaran Kas
+                          </p>
+                     </a>     
+                </li>
+                <li class="nav-item>
+                
+                     <a href="{{ route('penerimaan-kas.index') }}" class="nav-link">
                         <i class="fas fa-money-bill"></i>
                         <p>
                             Penerimaan Kas
+
                         </p>
                     </a>
+                
                 </li>
             </ul>
         </nav>
