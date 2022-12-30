@@ -32,13 +32,13 @@
                             <div class="col-sm-12 col-md-8 justify-content-start justify-content-sm-start d-flex">
                                 <div id="example1_filter">
                                     <form action="" method="get">
-    
+
                                         <label class="mr-3">Cari:<input type="text" name="search"
-                                                value="{{ request()->search ? request()->search : "" }}" class="form-control form-control-sm"
-                                                aria-controls="example1"></label>
+                                                value="{{ request()->search ? request()->search : "" }}"
+                                                class="form-control form-control-sm" aria-controls="example1"></label>
                                         <label class="mr-1">Tanggal:<input type="date" name="date"
-                                                value="{{ request()->date ? request()->date : "" }}" class="form-control form-control-sm"
-                                                aria-controls="example1"></label>
+                                                value="{{ request()->date ? request()->date : "" }}"
+                                                class="form-control form-control-sm" aria-controls="example1"></label>
                                         <a href="{{ route('penerimaan-kas.index') }}" class="btn btn-sm btn-secondary">
                                             Reset </a>
                                 </div>
@@ -79,11 +79,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                        use Carbon\Carbon;
+                                        @endphp
                                         @foreach($data as $key => $value)
                                         <tr>
                                             <td>{{ $value->invoice_number }}</td>
                                             <td>{{ $value->client }}</td>
-                                            <td>{{  Carbon::parse($value->paid_date)->dayName .', ' .Carbon::parse($value->paid_date)->format('d F Y') }}</td>
+                                            <td>{{  Carbon::parse($value->paid_date)->dayName .', ' .Carbon::parse($value->paid_date)->format('d F Y') }}
+                                            </td>
                                             <td>{{ $value->total }}</td>
                                             <td>{{ $value->note }}</td>
                                             <td class='d-flex justify-content-center'>
