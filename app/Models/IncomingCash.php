@@ -20,6 +20,7 @@ class IncomingCash extends Model
         'invoice_number',
         'user_id',
         'client',
+        'acc_type',
         'paid_date',
         'total',
         'note'

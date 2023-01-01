@@ -16,10 +16,11 @@ class CreateIncomingCashTable extends Migration
         Schema::create('incoming_cash', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->smallInteger('acc_type');
             $table->string('invoice_number', 50);
             $table->string('client', 50);
             $table->date('paid_date');
-            $table->string('total', 50);
+            $table->integer('total');
             $table->string('note', 100);
             $table->timestamps();
         });

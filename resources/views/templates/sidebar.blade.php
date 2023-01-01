@@ -86,7 +86,7 @@
                           </p>
                      </a>     
                 </li>
-                <li class="nav-item>
+                <li class="nav-item">
                 
                      <a href="{{ route('penerimaan-kas.index') }}" class="nav-link">
                         <i class="fas fa-money-bill"></i>

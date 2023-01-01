@@ -43,7 +43,7 @@ use Carbon\Carbon;
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
                                         <a href="{{ route('pengeluaran-kas.index') }}" class="btn btn-sm
                                         btn-secondary">
-                                        Reset </a>
+                                            Reset </a>
                                 </div>
                                 </form>
                             </div>
@@ -62,6 +62,8 @@ use Carbon\Carbon;
                                         <tr>
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Nomor Nota</th>
+                                            <th tabindex="0" rowspan="1" colspan="1">
+                                                Jenis Akun</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Nama Karyawan</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
@@ -86,9 +88,19 @@ use Carbon\Carbon;
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                        $acc_type = [
+                                        1 => "Beban",
+                                        2 => "Utang Usaha",
+                                        3 => "Utang Upah",
+                                        4 => "Prive",
+                                        5 => "Akumulasi Penyusutan"
+                                        ]
+                                        @endphp
                                         @foreach($data as $key => $value)
                                         <tr>
                                             <td>{{ $value->note_number }}</td>
+                                            <td>{{ $acc_type[$value->acc_type] }}</td>
                                             <td>{{ $value->employee_name }}</td>
                                             <td>{{ $value->position }}</td>
                                             <td>{{  Carbon::parse($value->outgoing_date)->dayName .', ' .Carbon::parse($value->outgoing_date)->format('d F Y') }}
@@ -108,7 +120,8 @@ use Carbon\Carbon;
                                                 </form>
                                                 <button class='edit-pengeluaran-kas-btn margin-right text-center'
                                                     id="edit-btn" data-toggle="modal" data-target="#modal-update"
-                                                    data-id="{{ $value->note_number }}" style='border: none; background-color: transparent;'>
+                                                    data-id="{{ $value->note_number }}"
+                                                    style='border: none; background-color: transparent;'>
                                                     <i class='fas fa-edit edit-icon'
                                                         style="color: rgb(75, 111, 255);"></i>
                                                 </button>
@@ -139,6 +152,18 @@ use Carbon\Carbon;
                                                     <input type="text" class="form-control" id="no-nota"
                                                         name="nomor_nota" placeholder="Masukan Nomor Nota">
                                                     <div style="color: red; display: none;" class="error-no-nota">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="acc-type">Tipe Akun</label>
+                                                    <select class="form-control" name="acc_type" id="acc-type">
+                                                        <option value="1">Beban</option>
+                                                        <option value="2">Utang Usaha</option>
+                                                        <option value="3">Utang Upah</option>
+                                                        <option value="4">Prive</option>
+                                                        <option value="5">Akumulasi Penyusutan</option>
+                                                    </select>
+                                                    <div style="color: red; display: none;" class="error-acc-type">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -222,6 +247,18 @@ use Carbon\Carbon;
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="edit-acc-type">Tipe Akun</label>
+                                                    <select class="form-control" name="acc_type" id="edit-acc-type">
+                                                        <option value="1">Beban</option>
+                                                        <option value="2">Utang Usaha</option>
+                                                        <option value="3">Utang Upah</option>
+                                                        <option value="4">Prive</option>
+                                                        <option value="5">Akumulasi Penyusutan</option>
+                                                    </select>
+                                                    <div style="color: red; display: none;" class="error-edit-acc-type">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
                                                     <label for="edit-nama-karyawan">Nama Karyawan</label>
                                                     <input type="text" class="form-control" id="edit-nama-karyawan"
                                                         name="nama_karyawan" placeholder="Masukan Nama Karyawan">
@@ -230,23 +267,23 @@ use Carbon\Carbon;
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="edit-jabatan">Jabatan</label>
-                                                    <input type="text" class="form-control" id="edit-jabatan" name="jabatan"
-                                                        placeholder="Masukan Jabatan">
+                                                    <input type="text" class="form-control" id="edit-jabatan"
+                                                        name="jabatan" placeholder="Masukan Jabatan">
                                                     <div style="color: red; display: none;" class="error-edit-jabatan">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="edit-tanggal-pengeluaran">Tanggal Pengeluaran</label>
-                                                    <input type="date" class="form-control" id="edit-tanggal-pengeluaran"
-                                                        name="tanggal_pengeluaran"
+                                                    <input type="date" class="form-control"
+                                                        id="edit-tanggal-pengeluaran" name="tanggal_pengeluaran"
                                                         placeholder="Masukan Tanggal Pengeluaran">
                                                     <div style="color: red; display: none;" class="error-edit-tanggal">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="edit-jumlah">Jumlah</label>
-                                                    <input type="text" class="form-control" id="edit-jumlah" name="jumlah"
-                                                        placeholder="Masukan Jumlah">
+                                                    <input type="text" class="form-control" id="edit-jumlah"
+                                                        name="jumlah" placeholder="Masukan Jumlah">
                                                     <div style="color: red; display: none;" class="error-edit-jumlah">
                                                     </div>
                                                 </div>
@@ -257,7 +294,8 @@ use Carbon\Carbon;
                                                     <textarea id="edit-keterangan" name="keterangan"
                                                         placeholder="Masukan Ketrangan" cols="50" class="form-control"
                                                         style="display: block"></textarea>
-                                                    <div style="color: red; display: none;" class="error-edit-keterangan">
+                                                    <div style="color: red; display: none;"
+                                                        class="error-edit-keterangan">
                                                     </div>
                                                 </div>
 
@@ -318,7 +356,7 @@ use Carbon\Carbon;
                     // console.log(response);
                     $("input[name='_token']").val(token);
                     $('#edit-no-nota').val(response.data.note_number);
-                    $('#edit-nama-karyawan').val(response.data.employee_name);
+                    $('#edit-acc-type option[value='+ response.data.acc_type  + ']').attr('selected', 'selected');                    $('#edit-nama-karyawan').val(response.data.employee_name);
                     $('#edit-jabatan').val(response.data.position);
                     $('#edit-tanggal-pengeluaran').val(response.data.outgoing_date);
                     $('#edit-jumlah').val(response.data.total);
@@ -327,6 +365,7 @@ use Carbon\Carbon;
 
                     // $('#get-username').val(response.data.username);
                     $('.error-edit-no-nota').css('display', 'none');
+                    $('.error-edit-acc-type').css('display', 'none');
                     $('.error-edit-karyawan').css('display', 'none');
                     $('.error-edit-jabatan').css('display', 'none');
                     $('.error-edit-tanggal').css('display', 'none');
@@ -410,6 +449,8 @@ use Carbon\Carbon;
                             })
                             $('.error-edit-no-nota').text(error.responseJSON
                                 .nomor_nota).css('display', '');
+                            $('.error-edit-acc-type').text(error.responseJSON
+                                .acc_type).css('display', '');
                             $('.error-edit-karyawan').text(error.responseJSON
                                 .nama_karyawan).css('display', '');
                             $('.error-edit-jabatan').text(error.responseJSON
@@ -523,6 +564,8 @@ use Carbon\Carbon;
                                 'error',
                             )
                             // console.log(error);
+                            $('.error-acc-type').text(error.responseJSON
+                                .acc_type).css('display', '');
                             $('.error-no-nota').text(error.responseJSON
                                 .nomor_nota).css('display', '');
                             $('.error-karyawan').text(error.responseJSON

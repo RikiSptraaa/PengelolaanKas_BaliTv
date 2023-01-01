@@ -60,6 +60,8 @@
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Nomor Invoice</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
+                                                Jenis Akun</th>
+                                            <th tabindex="0" rowspan="1" colspan="1">
                                                 Client</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Tanggal Bayar</th>
@@ -81,10 +83,20 @@
                                     <tbody>
                                         @php
                                         use Carbon\Carbon;
+
+                                        $acc_type = [
+                                            1 => 'kas',
+                                            2 => 'Pendapatan',
+                                            3 => 'Prive',
+                                            4 => 'Perlengkapan',
+                                            5 => 'Peralatan',
+                                            6 => 'Akumulasi Penyusutan',
+                                        ]
                                         @endphp
                                         @foreach($data as $key => $value)
                                         <tr>
                                             <td>{{ $value->invoice_number }}</td>
+                                            <td>{{ $acc_type[$value->acc_type] }}</td>
                                             <td>{{ $value->client }}</td>
                                             <td>{{  Carbon::parse($value->paid_date)->dayName .', ' .Carbon::parse($value->paid_date)->format('d F Y') }}
                                             </td>
@@ -134,6 +146,19 @@
                                                     <input type="text" class="form-control" id="no-invoice"
                                                         name="nomor_invoice" placeholder="Masukan Nomor Invoice">
                                                     <div style="color: red; display: none;" class="error-no-invoice">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="acc-type">Tipe Akun</label>
+                                                    <select class="form-control" name="acc_type" id="acc-type">
+                                                      <option value="1">Kas</option>
+                                                      <option value="2">Pendapatan</option>
+                                                      <option value="3">Prive</option>
+                                                      <option value="4">Perlengkapan</option>
+                                                      <option value="5">Peralatan</option>
+                                                      <option value="6">Akumulasi Penyusutan</option>
+                                                    </select>
+                                                    <div style="color: red; display: none;" class="error-acc-type">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -207,6 +232,18 @@
                                                         name="nomor_invoice" placeholder="Masukan Nomor Invoice">
                                                     <div style="color: red; display: none;"
                                                         class="error-edit-no-invoice">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit-acc-type">Tipe Akun</label>
+                                                    <select class="form-control" name="acc_type" id="edit-acc-type">
+                                                      <option value="1">Kas</option>
+                                                      <option value="2">Pendapatan</option>
+                                                      <option value="3">Perlengkapan</option>
+                                                      <option value="4">Peralatan</option>
+                                                      <option value="5">Akumulasi Penyusutan</option>
+                                                    </select>
+                                                    <div style="color: red; display: none;" class="error-edit-acc-type">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -298,6 +335,7 @@
                     // console.log(response.data.password);
                     $("input[name='_token']").val(token);
                     $('#edit-no-invoice').val(response.data.invoice_number);
+                    $('#edit-acc-type option[value='+ response.data.acc_type  + ']').attr('selected', 'selected');
                     $('#edit-client').val(response.data.client);
                     $('#edit-tanggal-bayar').val(response.data.paid_date);
                     $('#edit-jumlah').val(response.data.total);
@@ -363,6 +401,8 @@
                                 $("#modal-update-user").modal("hide");
                                 $('.error-edit-no-invoice').css('display',
                                     'none');
+                                $('.error-edit-acc-type').css('display',
+                                    'none');
                                 $('.error-edit-client').css('display',
                                     'none');
                                 $('.error-edit-tanggal-bayar').css(
@@ -386,6 +426,8 @@
                             })
                             $('.error-edit-no-invoice').text(error.responseJSON
                                 .nomor_invoice).css('display', '');
+                            $('.error-edit-acc-type').text(error.responseJSON
+                                .acc_type).css('display', '');
                             $('.error-edit-client').text(error.responseJSON
                                 .client).css('display', '');
                             $('.error-edit-tanggal-bayar').text(error.responseJSON
@@ -499,6 +541,8 @@
                             // console.log(error);
                             $('.error-no-invoice').text(error.responseJSON
                                 .nomor_invoice).css('display', '');
+                            $('.error-acc-type').text(error.responseJSON
+                                .acc_type).css('display', '');
                             $('.error-client').text(error.responseJSON
                                 .client).css('display', '');
                             $('.error-paid-date').text(error.responseJSON
