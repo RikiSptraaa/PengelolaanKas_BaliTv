@@ -62,7 +62,7 @@
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Jenis Akun</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
-                                                Client</th>
+                                                Deskripsi</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Tanggal Bayar</th>
                                             <th tabindex="0" rowspan="1" colspan="1"
@@ -97,7 +97,7 @@
                                         <tr>
                                             <td>{{ $value->invoice_number }}</td>
                                             <td>{{ $acc_type[$value->acc_type] }}</td>
-                                            <td>{{ $value->client }}</td>
+                                            <td>{{ $value->description }}</td>
                                             <td>{{  Carbon::parse($value->paid_date)->dayName .', ' .Carbon::parse($value->paid_date)->format('d F Y') }}
                                             </td>
                                             <td>{{ $value->total }}</td>
@@ -162,10 +162,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="client">Client</label>
-                                                    <input type="text" class="form-control" id="client" name="client"
-                                                        placeholder="Masukan Nama Client">
-                                                    <div style="color: red; display: none;" class="error-client">
+                                                    <label for="description">Deskripsi</label>
+                                                    <input type="text" class="form-control" id="description" name="description"
+                                                        placeholder="Masukan Deskripsi">
+                                                    <div style="color: red; display: none;" class="error-description">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -247,10 +247,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="client">Client</label>
-                                                    <input type="text" class="form-control" id="edit-client"
-                                                        name="client" placeholder="Masukan Nama Client">
-                                                    <div style="color: red; display: none;" class="error-edit-client">
+                                                    <label for="description">Deskripsi</label>
+                                                    <input type="text" class="form-control" id="edit-description"
+                                                        name="description" placeholder="Masukan Deskripsi">
+                                                    <div style="color: red; display: none;" class="error-edit-description">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -336,7 +336,7 @@
                     $("input[name='_token']").val(token);
                     $('#edit-no-invoice').val(response.data.invoice_number);
                     $('#edit-acc-type option[value='+ response.data.acc_type  + ']').attr('selected', 'selected');
-                    $('#edit-client').val(response.data.client);
+                    $('#edit-description').val(response.data.description);
                     $('#edit-tanggal-bayar').val(response.data.paid_date);
                     $('#edit-jumlah').val(response.data.total);
                     $('#edit-keterangan').val(response.data.note);
@@ -344,7 +344,7 @@
 
                     // $('#get-username').val(response.data.username);
                     $('.error-edit-no-invoice').css('display', 'none');
-                    $('.error-edit-client').css('display', 'none');
+                    $('.error-edit-description').css('display', 'none');
                     $('.error-edit-tanggal-bayar').css('display', 'none');
                     $('.error-edit-jumlah').css('display', 'none');
                     $('.error-edit-keterangan').css('display', 'none');
@@ -398,12 +398,12 @@
                                 title: 'Berhasil!',
                                 text: response.message,
                             }).then((result) => {
-                                $("#modal-update-user").modal("hide");
+                                $("#modal-update").modal("hide");
                                 $('.error-edit-no-invoice').css('display',
                                     'none');
                                 $('.error-edit-acc-type').css('display',
                                     'none');
-                                $('.error-edit-client').css('display',
+                                $('.error-edit-description').css('display',
                                     'none');
                                 $('.error-edit-tanggal-bayar').css(
                                     'display', 'none');
@@ -411,6 +411,7 @@
                                     'none');
                                 $('.error-edit-keterangan').css('display',
                                     'none');
+                                location.reload();
                             });
 
                         },
@@ -428,8 +429,8 @@
                                 .nomor_invoice).css('display', '');
                             $('.error-edit-acc-type').text(error.responseJSON
                                 .acc_type).css('display', '');
-                            $('.error-edit-client').text(error.responseJSON
-                                .client).css('display', '');
+                            $('.error-edit-description').text(error.responseJSON
+                                .description).css('display', '');
                             $('.error-edit-tanggal-bayar').text(error.responseJSON
                                 .tanggal_bayar).css('display', '');
                             $('.error-edit-jumlah').text(error.responseJSON
@@ -543,8 +544,8 @@
                                 .nomor_invoice).css('display', '');
                             $('.error-acc-type').text(error.responseJSON
                                 .acc_type).css('display', '');
-                            $('.error-client').text(error.responseJSON
-                                .client).css('display', '');
+                            $('.error-description').text(error.responseJSON
+                                .description).css('display', '');
                             $('.error-paid-date').text(error.responseJSON
                                 .tanggal_bayar).css('display', '');
                             $('.error-jumlah').text(error.responseJSON

@@ -67,7 +67,7 @@
     </div>
 
 
-    {{-- <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script> --}}
+    <script type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
 
     <script src="{{ asset('Admin-Lte/plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('Admin-Lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>

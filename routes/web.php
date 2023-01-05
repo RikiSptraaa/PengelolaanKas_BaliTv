@@ -8,6 +8,7 @@ use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\auth\AuthenticateController;
 use App\Http\Controllers\OutgoingCashController;
 use App\Http\Controllers\IncomingCashController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UsersController;
 use App\Models\IncomingCash;
 
@@ -44,4 +45,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/users', UsersController::class)->middleware('SuperAdmin');
     Route::resource('/pengeluaran-kas', OutgoingCashController::class);
     Route::resource('/penerimaan-kas', IncomingCashController::class);
+    Route::get('/laporan/laba', [ReportController::class, 'index']);
+    Route::post('/laporan/laba', [ReportController::class, 'show']);
+    Route::get('laporan/laba/cetak', [ReportController::class, 'printLaba']);
 });

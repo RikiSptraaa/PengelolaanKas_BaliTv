@@ -21,7 +21,7 @@ class IncomingCashController extends Controller
         $request = request()->all();
         $data = IncomingCash::latest();
         if (Request::input('search')) {
-            $data =  $data->where('invoice_number', 'LIKE', '%' . request()->search . '%')->orWhere('client', 'LIKE', '%' . request()->search . '%');
+            $data =  $data->where('invoice_number', 'LIKE', '%' . request()->search . '%')->orWhere('description', 'LIKE', '%' . request()->search . '%');
         }
         if (Request::input('date')) {
             $data =  $data->where('paid_date', '=', request()->date);
@@ -47,10 +47,11 @@ class IncomingCashController extends Controller
      */
     public function store(Request $request)
     {
+
         $validator = Validator::make(Request::all(), [
             'nomor_invoice' => 'required|unique:incoming_cash,invoice_number|max:50',
-            'client' => 'required|max:50',
             'acc_type' => 'required',
+            'description' => 'required|max:50',
             'tanggal_bayar' => 'required|date',
             'jumlah' => 'required|numeric',
             'keterangan' => 'required|max:100'
@@ -58,9 +59,9 @@ class IncomingCashController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'nomor_invoice' => $validator->errors()->get('nomor_invoice'),
-                'client' => $validator->errors()->get('client'),
                 'acc_type' => $validator->errors()->get('acc_type'),
+                'nomor_invoice' => $validator->errors()->get('nomor_invoice'),
+                'description' => $validator->errors()->get('description'),
                 'tanggal_bayar' => $validator->errors()->get('tanggal_bayar'),
                 'jumlah' => $validator->errors()->get('jumlah'),
                 'keterangan' => $validator->errors()->get('keterangan'),
@@ -69,12 +70,11 @@ class IncomingCashController extends Controller
             ], 422);
         }
 
-
         IncomingCash::create([
             'user_id' => Auth::user()->id,
             'invoice_number' => request()->nomor_invoice,
             'acc_type' => request()->acc_type,
-            'client' => request()->client,
+            'description' => request()->description,
             'paid_date' => request()->tanggal_bayar,
             'total' => request()->jumlah,
             'note' => request()->keterangan,
@@ -126,7 +126,7 @@ class IncomingCashController extends Controller
             'nomor_invoice' => 'required|max:50|unique:incoming_cash,invoice_number,' . $penerimaan_ka->id,
             // 'nomor_invoice' => ['required', 'max:50', Rule::unique('incoming_cash')->ignore(request()->nomor_invoice)],
             'acc_type' => 'required',
-            'client' => 'required|max:50',
+            'description' => 'required|max:50',
             'tanggal_bayar' => 'date|required',
             'jumlah' => 'numeric|required',
             'keterangan' => 'required|max:100'
@@ -136,7 +136,7 @@ class IncomingCashController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'nomor_invoice' => $validator->errors()->get('nomor_invoice'),
-                'client' => $validator->errors()->get('client'),
+                'description' => $validator->errors()->get('description'),
                 'tanggal_bayar' => $validator->errors()->get('tanggal_bayar'),
                 'jumlah' => $validator->errors()->get('jumlah'),
                 'keterangan' => $validator->errors()->get('keterangan'),
@@ -148,7 +148,7 @@ class IncomingCashController extends Controller
         $penerimaan_ka->update([
             'invoice_number' => request()->nomor_invoice,
             'acc_type' => request()->acc_type,
-            'client' => request()->client,
+            'description' => request()->description,
             'paid_date' => request()->tanggal_bayar,
             'total' => request()->jumlah,
             'note' => request()->keterangan,

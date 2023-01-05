@@ -65,9 +65,7 @@ use Carbon\Carbon;
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Jenis Akun</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
-                                                Nama Karyawan</th>
-                                            <th tabindex="0" rowspan="1" colspan="1">
-                                                Jabatan</th>
+                                                Deskripsi</th>
                                             <th tabindex="0" rowspan="1" colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
                                                 Tanggal Pengeluaran
@@ -101,8 +99,7 @@ use Carbon\Carbon;
                                         <tr>
                                             <td>{{ $value->note_number }}</td>
                                             <td>{{ $acc_type[$value->acc_type] }}</td>
-                                            <td>{{ $value->employee_name }}</td>
-                                            <td>{{ $value->position }}</td>
+                                            <td>{{ $value->description }}</td>
                                             <td>{{  Carbon::parse($value->outgoing_date)->dayName .', ' .Carbon::parse($value->outgoing_date)->format('d F Y') }}
                                             </td>
                                             <td>{{ $value->total }}</td>
@@ -167,17 +164,10 @@ use Carbon\Carbon;
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="nama-karyawan">Nama Karyawan</label>
-                                                    <input type="text" class="form-control" id="nama-karyawan"
-                                                        name="nama_karyawan" placeholder="Masukan Nama Karyawan">
-                                                    <div style="color: red; display: none;" class="error-karyawan">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="jabatan">Jabatan</label>
-                                                    <input type="text" class="form-control" id="jabatan" name="jabatan"
-                                                        placeholder="Masukan Jabatan">
-                                                    <div style="color: red; display: none;" class="error-jabatan">
+                                                    <label for="description">Deskripsi</label>
+                                                    <input type="text" class="form-control" id="description"
+                                                        name="description" placeholder="Masukan Deskripsi">
+                                                    <div style="color: red; display: none;" class="error-description">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -259,17 +249,10 @@ use Carbon\Carbon;
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="edit-nama-karyawan">Nama Karyawan</label>
-                                                    <input type="text" class="form-control" id="edit-nama-karyawan"
-                                                        name="nama_karyawan" placeholder="Masukan Nama Karyawan">
-                                                    <div style="color: red; display: none;" class="error-edit-karyawan">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="edit-jabatan">Jabatan</label>
-                                                    <input type="text" class="form-control" id="edit-jabatan"
-                                                        name="jabatan" placeholder="Masukan Jabatan">
-                                                    <div style="color: red; display: none;" class="error-edit-jabatan">
+                                                    <label for="edit-description">Deskripsi</label>
+                                                    <input type="text" class="form-control" id="edit-description"
+                                                        name="description" placeholder="Masukan Deskripsi">
+                                                    <div style="color: red; display: none;" class="error-edit-description">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -357,7 +340,7 @@ use Carbon\Carbon;
                     $("input[name='_token']").val(token);
                     $('#edit-no-nota').val(response.data.note_number);
                     $('#edit-acc-type option[value='+ response.data.acc_type  + ']').attr('selected', 'selected');                    $('#edit-nama-karyawan').val(response.data.employee_name);
-                    $('#edit-jabatan').val(response.data.position);
+                    $('#edit-description').val(response.data.description);
                     $('#edit-tanggal-pengeluaran').val(response.data.outgoing_date);
                     $('#edit-jumlah').val(response.data.total);
                     $('#edit-keterangan').val(response.data.note);
@@ -366,8 +349,7 @@ use Carbon\Carbon;
                     // $('#get-username').val(response.data.username);
                     $('.error-edit-no-nota').css('display', 'none');
                     $('.error-edit-acc-type').css('display', 'none');
-                    $('.error-edit-karyawan').css('display', 'none');
-                    $('.error-edit-jabatan').css('display', 'none');
+                    $('.error-edit-description').css('display', 'none');
                     $('.error-edit-tanggal').css('display', 'none');
                     $('.error-edit-jumlah').css('display', 'none');
                     $('.error-edit-keterangan').css('display', 'none');
@@ -451,10 +433,8 @@ use Carbon\Carbon;
                                 .nomor_nota).css('display', '');
                             $('.error-edit-acc-type').text(error.responseJSON
                                 .acc_type).css('display', '');
-                            $('.error-edit-karyawan').text(error.responseJSON
-                                .nama_karyawan).css('display', '');
-                            $('.error-edit-jabatan').text(error.responseJSON
-                                .jabatan).css('display', '');
+                            $('.error-edit-description').text(error.responseJSON
+                                .description).css('display', '');
                             $('.error-edit-tanggal').text(error.responseJSON
                                 .tanggal_pengeluaran).css('display', '');
                             $('.error-edit-jumlah').text(error.responseJSON
@@ -568,10 +548,8 @@ use Carbon\Carbon;
                                 .acc_type).css('display', '');
                             $('.error-no-nota').text(error.responseJSON
                                 .nomor_nota).css('display', '');
-                            $('.error-karyawan').text(error.responseJSON
-                                .nama_karyawan).css('display', '');
-                            $('.error-jabatan').text(error.responseJSON
-                                .jabatan).css('display', '');
+                            $('.error-description').text(error.responseJSON
+                                .description).css('display', '');
                             $('.error-tanggal').text(error.responseJSON
                                 .tanggal_pengeluaran).css('display', '');
                             $('.error-jumlah').text(error.responseJSON

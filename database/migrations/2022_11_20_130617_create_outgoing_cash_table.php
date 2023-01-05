@@ -18,8 +18,7 @@ class CreateOutgoingCashTable extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('note_number', 50);
             $table->smallInteger('acc_type');
-            $table->string('employee_name', 100);
-            $table->string('position', 50);
+            $table->string('description', 50);
             $table->date('outgoing_date');
             $table->integer('total');
             $table->string('note', 100);

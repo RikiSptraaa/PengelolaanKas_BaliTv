@@ -17,7 +17,7 @@
                 <a href="#" class="d-block text-center">{{ Auth::user()->name }}</a>
                 @if(Auth::user()->is_super_admin == 1)
 
-                <p class="text-sm d-block" style="color: white; margin: unset;" >Super Admin</p>
+                <p class="text-sm d-block" style="color: white; margin: unset;">Super Admin</p>
                 @endif
             </div>
         </div>
@@ -61,7 +61,7 @@
                 </li> --}}
                 <li class="nav-item">
                     <a href="/home" class="nav-link">
-                        <i class="fas fa-home"></i>
+                        <i class="fas fa-home mr-2"></i>
                         <p>
                             Home
                         </p>
@@ -70,7 +70,7 @@
                 @if(Auth::user()->is_super_admin == 1)
                 <li class="nav-item">
                     <a href="{{ route('users.index') }}" class="nav-link">
-                        <i class="fas fa-user"></i>
+                        <i class="fas fa-user mr-2"></i>
                         <p>
                             Pengguna
                         </p>
@@ -80,22 +80,55 @@
                 <li class="nav-item">
 
                     <a href="/pengeluaran-kas" class="nav-link">
-                        <i class="fas fa-cash-register"></i>
+                        <i class="fas fa-cash-register mr-2"></i>
                         <p>
                             Pengeluaran Kas
-                          </p>
-                     </a>     
-                </li>
-                <li class="nav-item">
-                
-                     <a href="{{ route('penerimaan-kas.index') }}" class="nav-link">
-                        <i class="fas fa-money-bill"></i>
-                        <p>
-                            Penerimaan Kas
-
                         </p>
                     </a>
-                
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('penerimaan-kas.index') }}" class="nav-link">
+                        <i class="fas fa-money-bill mr-2"></i>
+                        <p>
+                            Penerimaan Kas
+                        </p>
+                    </a>
+
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-file mr-2"></i>
+                        <p>
+                            Laporan
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: block;">
+                        <li class="nav-item">
+                            <a href="laporan/laba" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Laba Rugi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/forms/advanced.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Advanced Elements</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/forms/editors.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Editors</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/forms/validation.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Validation</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>

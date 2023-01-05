@@ -19,7 +19,7 @@ class OutgoingCashController extends Controller
         $data =  OutgoingCash::latest();
 
         if (request()->input('search')) {
-            $data = $data->Where('employee_name', 'LIKE', '%' . request('search') . '%')->orWhere('note_number', 'LIKE', '%' . request('search') . '%');
+            $data = $data->Where('description', 'LIKE', '%' . request('search') . '%')->orWhere('note_number', 'LIKE', '%' . request('search') . '%');
         }
         if (request()->input('date')) {
             $data = $data->where('outgoing_date', '=',  request('date'));
@@ -50,8 +50,7 @@ class OutgoingCashController extends Controller
         $validator = Validator::make($request->all(), [
             "nomor_nota" => "required|max:50|unique:outgoing_cash,note_number",
             "acc_type" => "required",
-            "nama_karyawan" => 'required|max:100',
-            "jabatan" => "required|max:50",
+            "description" => 'required|max:50',
             "tanggal_pengeluaran" => "required|date",
             "jumlah" => "required|numeric",
             "keterangan" => "required|max:100"
@@ -61,8 +60,7 @@ class OutgoingCashController extends Controller
             return response()->json([
                 "nomor_nota" => $validator->errors()->get('nomor_nota'),
                 "acc_type" => $validator->errors()->get('acc_type'),
-                "nama_karyawan" => $validator->errors()->get('nama_karyawan'),
-                "jabatan" => $validator->errors()->get('jabatan'),
+                "description" => $validator->errors()->get('description'),
                 "tanggal_pengeluaran" => $validator->errors()->get('tanggal_pengeluaran'),
                 "jumlah" => $validator->errors()->get('jumlah'),
                 "keterangan" => $validator->errors()->get('keterangan'),
@@ -75,8 +73,7 @@ class OutgoingCashController extends Controller
             "user_id" => Auth::user()->id,
             "acc_type" => $request->acc_type,
             "note_number" => $request->nomor_nota,
-            "employee_name" => $request->nama_karyawan,
-            "position" => $request->jabatan,
+            "description" => $request->description,
             "outgoing_date" => $request->tanggal_pengeluaran,
             "total" => $request->jumlah,
             "note" => $request->keterangan
@@ -125,8 +122,7 @@ class OutgoingCashController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "nomor_nota" => "required|max:50|unique:outgoing_cash,note_number," . $pengeluaran_ka->id,
-            "nama_karyawan" => 'required|max:100',
-            "jabatan" => "required|max:50",
+            "description" => 'required|max:100',
             "tanggal_pengeluaran" => "required|date",
             "jumlah" => "required|numeric",
             "keterangan" => "required|max:100"
@@ -146,8 +142,7 @@ class OutgoingCashController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 "nomor_nota" => $validator->errors()->get('nomor_nota'),
-                "nama_karyawan" => $validator->errors()->get('nama_karyawan'),
-                "jabatan" => $validator->errors()->get('jabatan'),
+                "description" => $validator->errors()->get('description'),
                 "tanggal_pengeluaran" => $validator->errors()->get('tanggal_pengeluaran'),
                 "jumlah" => $validator->errors()->get('jumlah'),
                 "keterangan" => $validator->errors()->get('keterangan'),
@@ -159,8 +154,7 @@ class OutgoingCashController extends Controller
         $pengeluaran_ka->update([
             "note_number" => $request->nomor_nota,
             "acc_type" => $request->acc_type,
-            "employee_name" => $request->nama_karyawan,
-            "position" => $request->jabatan,
+            "description" => $request->description,
             "outgoing_date" => $request->tanggal_pengeluaran,
             "total" => $request->jumlah,
             "note" => $request->keterangan

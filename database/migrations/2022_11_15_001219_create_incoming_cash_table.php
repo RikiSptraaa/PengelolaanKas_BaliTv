@@ -18,7 +18,7 @@ class CreateIncomingCashTable extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->smallInteger('acc_type');
             $table->string('invoice_number', 50);
-            $table->string('client', 50);
+            $table->string('description', 50);
             $table->date('paid_date');
             $table->integer('total');
             $table->string('note', 100);
