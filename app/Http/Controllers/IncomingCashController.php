@@ -16,7 +16,7 @@ class IncomingCashController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($print = false)
     {
         $request = request()->all();
         $data = IncomingCash::latest();
@@ -25,6 +25,14 @@ class IncomingCashController extends Controller
         }
         if (Request::input('date')) {
             $data =  $data->where('paid_date', '=', request()->date);
+        }
+        if (Request::input('acc_type')) {
+            $data =  $data->where('acc_type', '=', request()->acc_type);
+        }
+
+        if($print){
+            $data_print = $data->get();
+            return response()->json(['data' => $data_print]);
         }
         $data = $data->paginate(10);
         return view('PenerimaanKas.index', compact('data'))->with('request');

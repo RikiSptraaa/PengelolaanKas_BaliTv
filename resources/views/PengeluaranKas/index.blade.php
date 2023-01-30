@@ -19,7 +19,16 @@
 @section('content')
 @php
 use Carbon\Carbon;
+
+$acc_type = [
+1 => "Beban",
+2 => "Utang Usaha",
+3 => "Utang Upah",
+4 => "Prive",
+5 => "Akumulasi Penyusutan"
+]
 @endphp
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -41,6 +50,18 @@ use Carbon\Carbon;
                                         <label class="mr-1">Tanggal:<input type="date" name="date"
                                                 value="{{ request()->date ? request()->date : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
+                                        <label class="mr-1">Jenis Akun:
+                                            <select type="select" name="acc_type" class="form-control form-control-sm"
+                                                aria-controls="example1">
+                                                <option disabled selected>Pilih Jenis Akun</option>
+                                                @foreach($acc_type as $key => $value)
+                                                <option {{ request('acc_type') == $key ? 'selected': '' }}
+                                                    value="{{ $key }}">{{ $value }}</option>
+
+                                                @endforeach
+                                            </select>
+                                        </label>
+                                        <button type="submit" class="btn btn-sm btn-secondary">Cari</button>
                                         <a href="{{ route('pengeluaran-kas.index') }}" class="btn btn-sm
                                         btn-secondary">
                                             Reset </a>
@@ -86,15 +107,7 @@ use Carbon\Carbon;
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                        $acc_type = [
-                                        1 => "Beban",
-                                        2 => "Utang Usaha",
-                                        3 => "Utang Upah",
-                                        4 => "Prive",
-                                        5 => "Akumulasi Penyusutan"
-                                        ]
-                                        @endphp
+
                                         @foreach($data as $key => $value)
                                         <tr>
                                             <td>{{ $value->note_number }}</td>
@@ -252,7 +265,8 @@ use Carbon\Carbon;
                                                     <label for="edit-description">Deskripsi</label>
                                                     <input type="text" class="form-control" id="edit-description"
                                                         name="description" placeholder="Masukan Deskripsi">
-                                                    <div style="color: red; display: none;" class="error-edit-description">
+                                                    <div style="color: red; display: none;"
+                                                        class="error-edit-description">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -339,7 +353,9 @@ use Carbon\Carbon;
                     // console.log(response);
                     $("input[name='_token']").val(token);
                     $('#edit-no-nota').val(response.data.note_number);
-                    $('#edit-acc-type option[value='+ response.data.acc_type  + ']').attr('selected', 'selected');                    $('#edit-nama-karyawan').val(response.data.employee_name);
+                    $('#edit-acc-type option[value=' + response.data.acc_type + ']').attr(
+                        'selected', 'selected');
+                    $('#edit-nama-karyawan').val(response.data.employee_name);
                     $('#edit-description').val(response.data.description);
                     $('#edit-tanggal-pengeluaran').val(response.data.outgoing_date);
                     $('#edit-jumlah').val(response.data.total);

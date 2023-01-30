@@ -45,7 +45,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/users', UsersController::class)->middleware('SuperAdmin');
     Route::resource('/pengeluaran-kas', OutgoingCashController::class);
     Route::resource('/penerimaan-kas', IncomingCashController::class);
+
+    Route::get('/laporan/neraca', [ReportController::class, 'index_neraca']);
+    Route::post('/laporan/neraca', [ReportController::class, 'show_neraca']);
+    Route::get('/laporan/neraca/cetak', [ReportController::class, 'print_neraca']);
+
+    Route::get('/laporan/perubahan-equitas', [ReportController::class, 'index_equity']);
+    Route::post('/laporan/perubahan-equitas', [ReportController::class, 'show_equity']);
+    Route::get('/laporan/perubahan-equitas/cetak', [ReportController::class, 'print_equity']);
+
     Route::get('/laporan/laba', [ReportController::class, 'index']);
     Route::post('/laporan/laba', [ReportController::class, 'show']);
-    Route::get('laporan/laba/cetak', [ReportController::class, 'printLaba']);
+    Route::get('/laporan/laba/cetak', [ReportController::class, 'printLaba']);
+    
+
 });

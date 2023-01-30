@@ -17,6 +17,14 @@
 </style>
 @endsection
 @section('content')
+@php
+$acc_type = [
+1 => 'kas',
+2 => 'Pendapatan',
+4 => 'Perlengkapan',
+5 => 'Peralatan',
+]
+@endphp
 
 <div class="container-fluid">
     <div class="row">
@@ -39,6 +47,17 @@
                                         <label class="mr-1">Tanggal:<input type="date" name="date"
                                                 value="{{ request()->date ? request()->date : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
+                                        <label class="mr-1">Jenis Akun:
+                                            <select type="select" name="acc_type" class="form-control form-control-sm"
+                                                aria-controls="example1">
+                                                <option disabled selected>Pilih Jenis Akun</option>
+                                                @foreach($acc_type as $key => $value)
+                                                <option {{ request('acc_type') == $key ? 'selected': '' }} value="{{ $key }}">{{ $value }}</option>
+
+                                                @endforeach
+                                            </select>
+                                        </label>
+                                        <button type="submit" class="btn btn-sm btn-secondary">Cari</button>
                                         <a href="{{ route('penerimaan-kas.index') }}" class="btn btn-sm btn-secondary">
                                             Reset </a>
                                 </div>
@@ -84,14 +103,7 @@
                                         @php
                                         use Carbon\Carbon;
 
-                                        $acc_type = [
-                                            1 => 'kas',
-                                            2 => 'Pendapatan',
-                                            3 => 'Prive',
-                                            4 => 'Perlengkapan',
-                                            5 => 'Peralatan',
-                                            6 => 'Akumulasi Penyusutan',
-                                        ]
+
                                         @endphp
                                         @foreach($data as $key => $value)
                                         <tr>
@@ -151,20 +163,18 @@
                                                 <div class="form-group">
                                                     <label for="acc-type">Tipe Akun</label>
                                                     <select class="form-control" name="acc_type" id="acc-type">
-                                                      <option value="1">Kas</option>
-                                                      <option value="2">Pendapatan</option>
-                                                      <option value="3">Prive</option>
-                                                      <option value="4">Perlengkapan</option>
-                                                      <option value="5">Peralatan</option>
-                                                      <option value="6">Akumulasi Penyusutan</option>
+                                                        <option value="1">Kas</option>
+                                                        <option value="2">Pendapatan</option>
+                                                        <option value="4">Perlengkapan</option>
+                                                        <option value="5">Peralatan</option>
                                                     </select>
                                                     <div style="color: red; display: none;" class="error-acc-type">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="description">Deskripsi</label>
-                                                    <input type="text" class="form-control" id="description" name="description"
-                                                        placeholder="Masukan Deskripsi">
+                                                    <input type="text" class="form-control" id="description"
+                                                        name="description" placeholder="Masukan Deskripsi">
                                                     <div style="color: red; display: none;" class="error-description">
                                                     </div>
                                                 </div>
@@ -237,11 +247,11 @@
                                                 <div class="form-group">
                                                     <label for="edit-acc-type">Tipe Akun</label>
                                                     <select class="form-control" name="acc_type" id="edit-acc-type">
-                                                      <option value="1">Kas</option>
-                                                      <option value="2">Pendapatan</option>
-                                                      <option value="3">Perlengkapan</option>
-                                                      <option value="4">Peralatan</option>
-                                                      <option value="5">Akumulasi Penyusutan</option>
+                                                        <option value="1">Kas</option>
+                                                        <option value="2">Pendapatan</option>
+                                                        <option value="3">Perlengkapan</option>
+                                                        <option value="4">Peralatan</option>
+                                                        <option value="5">Akumulasi Penyusutan</option>
                                                     </select>
                                                     <div style="color: red; display: none;" class="error-edit-acc-type">
                                                     </div>
@@ -250,7 +260,8 @@
                                                     <label for="description">Deskripsi</label>
                                                     <input type="text" class="form-control" id="edit-description"
                                                         name="description" placeholder="Masukan Deskripsi">
-                                                    <div style="color: red; display: none;" class="error-edit-description">
+                                                    <div style="color: red; display: none;"
+                                                        class="error-edit-description">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -335,7 +346,8 @@
                     // console.log(response.data.password);
                     $("input[name='_token']").val(token);
                     $('#edit-no-invoice').val(response.data.invoice_number);
-                    $('#edit-acc-type option[value='+ response.data.acc_type  + ']').attr('selected', 'selected');
+                    $('#edit-acc-type option[value=' + response.data.acc_type + ']').attr(
+                        'selected', 'selected');
                     $('#edit-description').val(response.data.description);
                     $('#edit-tanggal-bayar').val(response.data.paid_date);
                     $('#edit-jumlah').val(response.data.total);

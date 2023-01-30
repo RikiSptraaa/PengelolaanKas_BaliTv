@@ -14,7 +14,7 @@ class OutgoingCashController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($print = false)
     {
         $data =  OutgoingCash::latest();
 
@@ -23,6 +23,9 @@ class OutgoingCashController extends Controller
         }
         if (request()->input('date')) {
             $data = $data->where('outgoing_date', '=',  request('date'));
+        }
+        if (request()->input('acc_type')) {
+            $data =  $data->where('acc_type', '=', request()->acc_type);
         }
 
         $data = $data->paginate(10);

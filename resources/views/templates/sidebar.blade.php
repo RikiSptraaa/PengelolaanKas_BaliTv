@@ -96,38 +96,33 @@
 
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="fas fa-file mr-2"></i>
                         <p>
                             Laporan
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview" style="display: block;">
+                    <ul class="nav nav-treeview" style="display: none;">
                         <li class="nav-item">
-                            <a href="laporan/laba" class="nav-link">
+                            <a href="{{ url('laporan/laba') }}" class="nav-link text-sm">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Laporan Laba Rugi</p>
+                                <p>Laporan Laba / Rugi</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/forms/advanced.html" class="nav-link">
+                            <a href="{{ url('laporan/perubahan-equitas') }}" class="nav-link text-sm">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Advanced Elements</p>
+                                <p>Laporan Perubahan Equitas</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/forms/editors.html" class="nav-link">
+                            <a href="{{ url('laporan/neraca') }}" class="nav-link text-sm">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Editors</p>
+                                <p>Laporan Neraca</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/forms/validation.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Validation</p>
-                            </a>
-                        </li>
                     </ul>
                 </li>
             </ul>
