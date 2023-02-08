@@ -39,7 +39,7 @@ $acc_type = [
                         <div class="row">
                             <div class="col-sm-12 col-md-8 justify-content-start justify-content-sm-start d-flex">
                                 <div id="example1_filter">
-                                    <form action="" method="get">
+                                    <form action="" method="get" id="form-cari">
 
                                         <label class="mr-3">Cari:<input type="text" name="search"
                                                 value="{{ request()->search ? request()->search : "" }}"
@@ -52,7 +52,8 @@ $acc_type = [
                                                 aria-controls="example1">
                                                 <option disabled selected>Pilih Jenis Akun</option>
                                                 @foreach($acc_type as $key => $value)
-                                                <option {{ request('acc_type') == $key ? 'selected': '' }} value="{{ $key }}">{{ $value }}</option>
+                                                <option {{ request('acc_type') == $key ? 'selected': '' }}
+                                                    value="{{ $key }}">{{ $value }}</option>
 
                                                 @endforeach
                                             </select>
@@ -60,6 +61,7 @@ $acc_type = [
                                         <button type="submit" class="btn btn-sm btn-secondary">Cari</button>
                                         <a href="{{ route('penerimaan-kas.index') }}" class="btn btn-sm btn-secondary">
                                             Reset </a>
+                                        <button id="btn-cetak" class="btn btn-sm btn-secondary">Cetak</button>
                                 </div>
                                 </form>
                             </div>
@@ -330,6 +332,9 @@ $acc_type = [
 @section('script')
 <script>
     $(document).ready(function () {
+        $('#btn-cetak').click(function () {
+            $('#form-cari').attr('action', '/penerimaan-kas/cetak')
+        });
         //script show
         $('.edit-penerimaan-kas-btn').click(function (e) {
             var invoice_number = $(this).data('id');

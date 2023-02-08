@@ -43,7 +43,12 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('/users', UsersController::class)->middleware('SuperAdmin');
+
+    Route::get('/pengeluaran-kas/cetak', [OutgoingCashController::class, 'print'])->name('pengeluaran-kas.print');
     Route::resource('/pengeluaran-kas', OutgoingCashController::class);
+
+
+    Route::get('/penerimaan-kas/cetak', [IncomingCashController::class, 'print'])->name('penerimaan-kas.print');
     Route::resource('/penerimaan-kas', IncomingCashController::class);
 
     Route::get('/laporan/neraca', [ReportController::class, 'index_neraca']);

@@ -6,6 +6,7 @@ use App\Models\OutgoingCash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OutgoingCashController extends Controller
 {
@@ -14,7 +15,7 @@ class OutgoingCashController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($print = false)
+    public function index(Request $request, $print = false)
     {
         $data =  OutgoingCash::latest();
 
@@ -28,11 +29,27 @@ class OutgoingCashController extends Controller
             $data =  $data->where('acc_type', '=', request()->acc_type);
         }
 
+        $data_print = $data->get()->toArray();
+
+
+        if($print){
+      
+            return response()->json(['data' => $data_print]) ;
+        }
+
         $data = $data->paginate(10);
+
 
         return view('PengeluaranKas.index', compact('data'));
     }
 
+    public function print(Request $request){
+        $data = $this->index($request, true)->original;
+        $data = $data['data'];
+
+        $pdf = Pdf::loadView('PengeluaranKas.pdf', compact('data'));
+        return $pdf->stream('Pengeluaran Kas.pdf');
+    }
     /**
      * Show the form for creating a new resource.
      *

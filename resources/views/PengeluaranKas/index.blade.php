@@ -42,7 +42,7 @@ $acc_type = [
                         <div class="row">
                             <div class="col-sm-12 col-md-8 justify-content-start justify-content-sm-start d-flex">
                                 <div id="example1_filter">
-                                    <form action="" method="get">
+                                    <form action="" method="get" id="form-cari">
 
                                         <label class="mr-3">Cari:<input type="text" name="search"
                                                 value="{{ request()->search ? request()->search : "" }}"
@@ -61,10 +61,14 @@ $acc_type = [
                                                 @endforeach
                                             </select>
                                         </label>
+                                        
                                         <button type="submit" class="btn btn-sm btn-secondary">Cari</button>
                                         <a href="{{ route('pengeluaran-kas.index') }}" class="btn btn-sm
                                         btn-secondary">
                                             Reset </a>
+                                        <button id="btn-cetak" class="btn btn-sm btn-secondary">Cetak</button>
+                                        {{-- <a href="{{ route('pengeluaran-kas.print') }}" class="btn btn-sm
+                                        btn-secondary">Cetak</a> --}}
                                 </div>
                                 </form>
                             </div>
@@ -337,6 +341,10 @@ $acc_type = [
 @section('script')
 <script>
     $(document).ready(function () {
+
+        $('#btn-cetak').click(function () {
+            $('#form-cari').attr('action', '/pengeluaran-kas/cetak')
+        });
         //script show
         $('.edit-pengeluaran-kas-btn').click(function (e) {
             var nomor_nota = $(this).data('id');

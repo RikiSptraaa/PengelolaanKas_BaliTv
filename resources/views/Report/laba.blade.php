@@ -66,16 +66,22 @@
                     _token: "{{csrf_token()}}"
                 },
                 beforeSend: function () {
-                    Swal.fire({
-                        title: 'Generating Report...',
-                        html: "Please wait.",
-                        timerProgressBar: true,
-                        onBeforeOpen: function () {
-                            swal.showLoading()
-                        },
-                    })
+                    swal.fire({
+                        html: '<h5>Loading...</h5>',
+                        showConfirmButton: false,
+                        didOpen: function () {
+                            Swal.showLoading()
+                            // there will only ever be one sweet alert open.
+                        }
+                    });
                 },
                 success: function (response) {
+                    swal.close();
+                    swal.fire({
+                        title: "Success",
+                        icon: "success",
+                        showConfirmButton: true,
+                    });
                     $('#btn-show').html('Cari').removeAttr('disabled');
                     $('#btn-cetak').removeAttr('disabled');
                     $('#div-report').hide();
@@ -85,11 +91,7 @@
                     // // countTotalBalance();
 
 
-                    swal({
-                        title: "Success",
-                        type: "success",
-                        showConfirmButton: true,
-                    });
+                  
                 },
             });
         });

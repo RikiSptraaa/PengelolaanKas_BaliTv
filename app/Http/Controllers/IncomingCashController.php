@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class IncomingCashController extends Controller
 {
@@ -16,7 +17,7 @@ class IncomingCashController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($print = false)
+    public function index(Request $request, $print = false)
     {
         $request = request()->all();
         $data = IncomingCash::latest();
@@ -31,11 +32,19 @@ class IncomingCashController extends Controller
         }
 
         if($print){
-            $data_print = $data->get();
+            $data_print = $data->get()->toArray();
             return response()->json(['data' => $data_print]);
         }
         $data = $data->paginate(10);
         return view('PenerimaanKas.index', compact('data'))->with('request');
+    }
+
+    public function print(Request $request){
+        $data = $this->index($request, true)->original;
+        $data = $data['data'];
+
+        $pdf = Pdf::loadView('PenerimaanKas.pdf', compact('data'));
+        return $pdf->stream('Penerimaan Kas.pdf');
     }
 
     /**

@@ -6,6 +6,7 @@
     table{
         width: 100%;
         border: 1px solid black;
+        background:  rgba(220, 220, 220, 0.477);
         border-collapse: collapse;
     }
     th, td{
@@ -67,8 +68,8 @@
             </tr>
             @endforeach
             <tr>
-                <td style="background-color: rgba(220, 220, 220, 0.477)">Total Beban</td>
-                <td style="background-color: rgba(220, 220, 220, 0.477)"> {{ Money::IDR($beban, true) }}</td>
+                <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">Total Beban</td>
+                <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}"> {{ Money::IDR($beban, true) }}</td>
             </tr>
             <tr>
                 <td style="background-color: rgba(220, 220, 220, 0.477)">Laba Bersih</td>
