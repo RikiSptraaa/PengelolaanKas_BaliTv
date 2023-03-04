@@ -4,7 +4,6 @@
 
 <div style="display: flex; justify-content: center;">
     <img src="{{ asset('storage/img/bali-tv.png') }}" style="width: 200px; height: 200px;">
-
 </div>
 
 <div class="container">

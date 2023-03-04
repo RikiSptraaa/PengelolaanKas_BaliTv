@@ -44,7 +44,7 @@ $acc_type = [
                                         <label class="mr-3">Cari:<input type="text" name="search"
                                                 value="{{ request()->search ? request()->search : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
-                                        <label class="mr-1">Tanggal:<input type="date" name="date"
+                                        <label class="mr-1">Tanggal:<input type="month" name="date"
                                                 value="{{ request()->date ? request()->date : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
                                         <label class="mr-1">Jenis Akun:

@@ -20,12 +20,13 @@ class IncomingCashController extends Controller
     public function index(Request $request, $print = false)
     {
         $request = request()->all();
+        $month = explode('-', $request['date']?? null);
         $data = IncomingCash::latest();
         if (Request::input('search')) {
             $data =  $data->where('invoice_number', 'LIKE', '%' . request()->search . '%')->orWhere('description', 'LIKE', '%' . request()->search . '%');
         }
         if (Request::input('date')) {
-            $data =  $data->where('paid_date', '=', request()->date);
+            $data =  $data->whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0]);
         }
         if (Request::input('acc_type')) {
             $data =  $data->where('acc_type', '=', request()->acc_type);
