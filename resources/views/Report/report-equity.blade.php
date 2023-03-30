@@ -78,8 +78,8 @@
                 <td> {{ Money::IDR($penambahan_modal, true) }}</td>
             </tr>
             <tr>
-                <td style="background-color: rgba(220, 220, 220, 0.477); border: none;">Modal Akhir</td>
-                <td style="background-color: rgba(220, 220, 220, 0.477); border: none;">{{  Money::IDR($modal_akhir, true) }}</td>
+                <td style="background-color:{{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">Modal Akhir</td>
+                <td style="background-color:{{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">{{  Money::IDR($modal_akhir, true) }}</td>
             </tr>
         </tbody>
     </table>

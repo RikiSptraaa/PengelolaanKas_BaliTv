@@ -72,8 +72,8 @@
                 <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}"> {{ Money::IDR($beban, true) }}</td>
             </tr>
             <tr>
-                <td style="background-color: rgba(220, 220, 220, 0.477)">Laba Bersih</td>
-                <td style="background-color: rgba(220, 220, 220, 0.477)">{{  Money::IDR($laba, true) }}</td>
+                <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">Laba Bersih</td>
+                <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">{{  Money::IDR($laba, true) }}</td>
             </tr>
         </tbody>
     </table>

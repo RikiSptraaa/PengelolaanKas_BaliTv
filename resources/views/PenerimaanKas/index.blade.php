@@ -37,15 +37,18 @@ $acc_type = [
                 <div class="card-body">
                     <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                         <div class="row">
-                            <div class="col-sm-12 col-md-8 justify-content-start justify-content-sm-start d-flex">
+                            <div class="col-sm-12 col-md-9 justify-content-start justify-content-sm-start d-flex">
                                 <div id="example1_filter">
                                     <form action="" method="get" id="form-cari">
 
-                                        <label class="mr-3">Cari:<input type="text" name="search"
+                                        <label class="mr-1">Cari:<input type="text" name="search"
                                                 value="{{ request()->search ? request()->search : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
-                                        <label class="mr-1">Tanggal:<input type="month" name="date"
+                                        <label class="mr-1">Tanggal:<input type="date" name="date"
                                                 value="{{ request()->date ? request()->date : "" }}"
+                                                class="form-control form-control-sm" aria-controls="example1"></label>
+                                        <label class="mr-1">Bulan:<input type="month" name="month"
+                                                value="{{ request()->month ? request()->month : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
                                         <label class="mr-1">Jenis Akun:
                                             <select type="select" name="acc_type" class="form-control form-control-sm"
@@ -58,6 +61,7 @@ $acc_type = [
                                                 @endforeach
                                             </select>
                                         </label>
+                                        <br>
                                         <button type="submit" class="btn btn-sm btn-secondary">Cari</button>
                                         <a href="{{ route('penerimaan-kas.index') }}" class="btn btn-sm btn-secondary">
                                             Reset </a>
@@ -66,9 +70,12 @@ $acc_type = [
                                 </form>
                             </div>
                             <div
-                                class="mt-2 col-sm-12 col-md-4 justify-content-md-end d-flex justify-content-sm-start align-items-center">
-                                <button class="btn btn-secondary buttons-html5" data-toggle="modal"
+                                class="mt-2 col-sm-12 col-md-3 justify-content-md-end d-flex justify-content-sm-start align-items-center">
+                                @if($user->is_super_admin == 1)    
+                                 <button class="btn btn-secondary buttons-html5" data-toggle="modal"
                                     data-target="#modal-tambah">Tambah Penerimaan Kas +</button>
+                                @endif
+                                
 
                             </div>
                         </div>

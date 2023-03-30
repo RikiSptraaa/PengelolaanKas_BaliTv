@@ -24,7 +24,7 @@ use App\Models\IncomingCash;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('home'));
 });
 
 

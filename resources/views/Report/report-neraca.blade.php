@@ -112,7 +112,7 @@ use Akaunting\Money\Money;
             <td>Jumlah Ekuitas</td>
             <td> {{ Money::IDR(collect($acc_outgoing)->whereIn('acc_type', [4,5])->sum('total'), true) }} </td>
         </tr>
-        <tr style="background-color: rgba(220, 220, 220, 0.477);">
+        <tr style="background-color:{{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }};">
             <td>Total Aktiva</td>
             <td>{{ Money::IDR(collect($acc_income)->sum('total'), true) }}</td>
             <td>Total Liabilitas & Ekuitas</td>

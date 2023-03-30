@@ -18,9 +18,16 @@ class OutgoingCashController extends Controller
     public function index(Request $request, $print = false)
     {
         $data =  OutgoingCash::latest();
+        $user = Auth::user();
+        $month = explode('-', $request['month']?? null);
+
+
 
         if (request()->input('search')) {
             $data = $data->Where('description', 'LIKE', '%' . request('search') . '%')->orWhere('note_number', 'LIKE', '%' . request('search') . '%');
+        }
+        if (request()->input('month')) {
+            $data = $data->whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0]);
         }
         if (request()->input('date')) {
             $data = $data->where('outgoing_date', '=',  request('date'));
@@ -40,7 +47,7 @@ class OutgoingCashController extends Controller
         $data = $data->paginate(10);
 
 
-        return view('PengeluaranKas.index', compact('data'));
+        return view('PengeluaranKas.index', compact('data', 'user'));
     }
 
     public function print(Request $request){
