@@ -44,17 +44,17 @@ $acc_type = [
                                 <div id="example1_filter">
                                     <form action="" method="get" id="form-cari">
 
-                                        <label class="mr-1">Cari:<input type="text" name="search"
+                                        <label class="mr-1">Cari:<input type="text" name="search" id="search"
                                                 value="{{ request()->search ? request()->search : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
-                                        <label class="mr-1">Tanggal:<input type="date" name="date"
+                                        <label class="mr-1">Tanggal:<input type="date" name="date" id="date"
                                                 value="{{ request()->date ? request()->date : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
-                                        <label class="mr-1">Bulan:<input type="month" name="month"
+                                        <label class="mr-1">Bulan:<input type="month" name="month" id="month"
                                                 value="{{ request()->month ? request()->month : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
                                         <label class="mr-1">Jenis Akun:
-                                            <select type="select" name="acc_type" class="form-control form-control-sm"
+                                            <select type="select" name="acc_type" class="form-control form-control-sm" id="acc_type"
                                                 aria-controls="example1">
                                                 <option disabled selected>Pilih Jenis Akun</option>
                                                 @foreach($acc_type as $key => $value)
@@ -349,7 +349,12 @@ $acc_type = [
     $(document).ready(function () {
 
         $('#btn-cetak').click(function () {
-            $('#form-cari').attr('action', '/pengeluaran-kas/cetak')
+            var search = $('#search').val() ?? '';
+            var date = $('#date').val() ?? ''; 
+            var month = $('#month').val() ?? '';
+            var acc_type = $('#acc_type').val() == null ? '' : $('#acc_type').val();
+            url = '{{ url("/pengeluaran-kas/cetak") }}?search='+search+'&date='+date+'&month='+month+'&acc_type='+acc_type;
+            window.open(url, "_blank");
         });
         //script show
         $('.edit-pengeluaran-kas-btn').click(function (e) {

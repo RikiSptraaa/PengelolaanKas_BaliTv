@@ -32,8 +32,9 @@ use Akaunting\Money\Money;
                 style="background-color: rgba(220, 220, 220, 0.477);">
                 <h3>Bali TV</h3>
                 <h4>Laporan Neraca<h4>
+                    @php $yearMonth = $month[0].'-'.$month[1]  @endphp
                         <p>Periode Yang Berakhir Pada
-                            {{ Carbon::parse($date)->dayName .', ' .Carbon::parse($date)->format('d F Y') }}</p>
+                            {{ Carbon::parse($yearMonth)->format('F Y') }}</p>
             </td>
         </tr>
         <tr class="text-center" style="background-color: rgba(220, 220, 220, 0.477);">

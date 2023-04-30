@@ -15,7 +15,7 @@
                             <div class="col-sm-12 col-md-8 justify-content-start justify-content-sm-start d-flex">
                                 <div id="example1_filter">
                                     <form action="{{ url('laporan/laba/cetak') }}" method="get" id="form-generate-report">
-                                    <label class="mr-1">Tanggal:<input type="date" name="date" value="" id="date"
+                                    <label class="mr-1">Tanggal:<input type="month" name="date" value="" id="date"
                                             class="form-control form-control-sm" aria-controls="example1"></label>
                                     <button class="btn btn-sm btn-secondary" id="btn-show"
                                         data-url='{{  url('laporan/laba') }}'>
@@ -93,6 +93,16 @@
 
                   
                 },
+                error: function(error){
+                    $('#btn-show').html('Cari').removeAttr('disabled');
+                    $('#btn-cetak').removeAttr('disabled');
+                    swal.fire({
+                        title: "Error",
+                        icon: "error",
+                        text: error.responseJSON.message,
+                        showConfirmButton: true,
+                    });
+                }
             });
         });
     });

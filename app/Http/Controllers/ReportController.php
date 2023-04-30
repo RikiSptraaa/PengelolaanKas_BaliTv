@@ -17,10 +17,17 @@ class ReportController extends Controller
     public function show(Request $request)
     {
 
-        $date = $request->date == null ? date('Y-m-d') : $request->date;
+        if($request->date == null){
+            return response()->json([
+                'status' => false,
+                'message' => "Silahkan Pilih Bulan Terlebihdahulu"
+            ], 400);
+        }
+        $month = explode('-', $request['date']?? null);
 
-        $acc_income = IncomingCash::whereDate('paid_date', '<=', $date)->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereDate('outgoing_date', '<=', $date)->where('acc_type', 1)->get()->toArray();
+
+        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
 
 
         return response()->json([
@@ -29,7 +36,7 @@ class ReportController extends Controller
                 compact(
                     'acc_income',
                     'acc_outgoing',
-                    'date'
+                    'month'
                 )
             )->render(),
         ]);
@@ -37,14 +44,16 @@ class ReportController extends Controller
 
     public function printLaba(Request $request)
     {
-        $date = $request->date == null ? date('Y-m-d') : $request->date;
+        // $date = $request->date == null ? date('Y-m-d') : $request->date;
+        $month = explode('-', $request['date']?? null);
+
         $is_print = true;
 
-        $acc_income = IncomingCash::whereDate('paid_date', '<=', $date)->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereDate('outgoing_date', '<=', $date)->where('acc_type', 1)->get()->toArray();
+        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
 
 
-        $pdf = Pdf::loadView('report.report-laba', compact('date', 'acc_income', 'acc_outgoing', 'is_print'));
+        $pdf = Pdf::loadView('report.report-laba', compact('month', 'acc_income', 'acc_outgoing', 'is_print'));
         return $pdf->stream('Laba.pdf');
     }
 
@@ -53,10 +62,19 @@ class ReportController extends Controller
     }
 
     public function show_equity(Request $request){
-        $date = $request->date == null ? date('Y-m-d') : $request->date;
 
-        $acc_income = IncomingCash::whereDate('paid_date', '<=', $date)->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereDate('outgoing_date', '<=', $date)->get()->toArray();
+        if($request->date == null){
+            return response()->json([
+                'status' => false,
+                'message' => "Silahkan Pilih Bulan Terlebihdahulu"
+            ], 400);
+        }
+
+        $month = explode('-', $request['date']?? null);
+
+
+        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
 
         $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
         $beban = collect($acc_outgoing)->where('acc_type', 1)->sum('total') ?? 0;                 
@@ -68,7 +86,7 @@ class ReportController extends Controller
                 compact(
                     'acc_income',
                     'acc_outgoing',
-                    'date',
+                    'month',
                     'laba_bersih'
                 )
             )->render(),
@@ -76,11 +94,12 @@ class ReportController extends Controller
     }
     public function print_equity(Request $request)
     {
+        $month = explode('-', $request['date']?? null);
         $date = $request->date == null ? date('Y-m-d') : $request->date;
         $is_print = true;
 
-        $acc_income = IncomingCash::whereDate('paid_date', '<=', $date)->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereDate('outgoing_date', '<=', $date)->where('acc_type', 1)->get()->toArray();
+        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
 
         $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
         $beban = collect($acc_outgoing)->where('acc_type', 1)->sum('total') ?? 0;                 
@@ -89,7 +108,7 @@ class ReportController extends Controller
 
         $pdf = Pdf::loadView('report.report-equity', compact( 'acc_income',
         'acc_outgoing',
-        'date',
+        'month',
         'laba_bersih',
         'is_print'));
         return $pdf->stream('Perubahan Ekuitas '.$date.'.pdf');
@@ -99,11 +118,13 @@ class ReportController extends Controller
         return view('report.neraca');
     }
     public function show_neraca(Request $request){
+        $month = explode('-', $request['date']?? null);
+
         $date = $request->date == null ? date('Y-m-d') : $request->date;
        
 
-        $acc_income = IncomingCash::whereDate('paid_date', '<=', $date)->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereDate('outgoing_date', '<=', $date)->get()->toArray();
+        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
 
         return response()->json([
             'report_view' => view(
@@ -111,7 +132,7 @@ class ReportController extends Controller
                 compact(
                     'acc_income',
                     'acc_outgoing',
-                    'date',
+                    'month',
                 )
             )->render(),
         ]);
@@ -119,15 +140,17 @@ class ReportController extends Controller
     }
     public function print_neraca(Request $request)
     {
+        $month = explode('-', $request['date']?? null);
+
         $date = $request->date == null ? date('Y-m-d') : $request->date;
         $is_print = true;
 
-        $acc_income = IncomingCash::whereDate('paid_date', '<=', $date)->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereDate('outgoing_date', '<=', $date)->get()->toArray();
+        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
 
         $pdf = Pdf::loadView('report.report-neraca', compact( 'acc_income',
         'acc_outgoing',
-        'date',
+        'month',
         'is_print'));
         return $pdf->stream('Laporan Neraca '.$date.'.pdf');
     }

@@ -1,5 +1,7 @@
 @php
     use Carbon\Carbon;
+    use Akaunting\Money\Currency;
+    use Akaunting\Money\Money;
 @endphp
 @if(isset($is_print))
 <style>
@@ -31,24 +33,35 @@
                 <td colspan="2" class="text-center font-weight-bold title" style="background-color: rgba(220, 220, 220, 0.477)">
                     <h3>Bali TV</h3>
                     <h4>Laporan Laba / Rugi<h4>
-                            <p>Periode Yang Berakhir Pada {{ Carbon::parse($date)->dayName .', ' .Carbon::parse($date)->format('d F Y') }}</p>
+                        @php $yearMonth = $month[0].'-'.$month[1]  @endphp
+                            <p>Periode Yang Berakhir Pada {{ Carbon::parse($yearMonth)->format('F Y') }}</p>
                 </td>
             </tr>
         </thead>
         <tbody>
+            @foreach($acc_income as $key => $value)
             <tr>
                 <td>
-                    Pendapatan
+                    {{ '('.$value['invoice_number'].') ' . $value['description'] }}
+                </td>
+                <td>
+                    {{ Money::IDR($value['total'], true) }}
+                </td>
+
+            </tr>
+            @endforeach
+            <tr>
+                <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">
+                    Total Pendapatan
                 </td>
                 @php
-                    use Akaunting\Money\Currency;
-                    use Akaunting\Money\Money;
-                    $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
-                    $beban = collect($acc_outgoing)->where('acc_type', 1)->sum('total') ?? 0;                 
+                  
+                    $pendapatan = collect($acc_income)->sum('total') ?? 0;
+                    $beban = collect($acc_outgoing)->sum('total') ?? 0;                 
                     $laba = $pendapatan - $beban;
                 
                 @endphp
-                <td>
+                <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">
                     {{ Money::IDR($pendapatan, true) }}
 
                 </td>

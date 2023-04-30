@@ -30,7 +30,9 @@
                 <td colspan="2" class="text-center font-weight-bold title" style="background-color: rgba(220, 220, 220, 0.477)">
                     <h3>Bali TV</h3>
                     <h4>Laporan Perubahan Equitas<h4>
-                    <p>Periode Yang Berakhir Pada {{ Carbon::parse($date)->dayName .', ' .Carbon::parse($date)->format('d F Y') }}</p>
+                        @php $yearMonth = $month[0].'-'.$month[1]  @endphp
+                        <p>Periode Yang Berakhir Pada {{ Carbon::parse($yearMonth)->format('F Y') }}</p>
+                    {{-- <p>Periode Yang Berakhir Pada {{Carbon::parse($date)->format('F Y') }}</p> --}}
                 </td>
             </tr>
         </thead>

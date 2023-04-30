@@ -41,19 +41,19 @@ $acc_type = [
                                 <div id="example1_filter">
                                     <form action="" method="get" id="form-cari">
 
-                                        <label class="mr-1">Cari:<input type="text" name="search"
+                                        <label class="mr-1">Cari:<input type="text" name="search" id="search"
                                                 value="{{ request()->search ? request()->search : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
-                                        <label class="mr-1">Tanggal:<input type="date" name="date"
+                                        <label class="mr-1">Tanggal:<input type="date" name="date" id="date"
                                                 value="{{ request()->date ? request()->date : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
-                                        <label class="mr-1">Bulan:<input type="month" name="month"
+                                        <label class="mr-1">Bulan:<input type="month" name="month" id="month"
                                                 value="{{ request()->month ? request()->month : "" }}"
                                                 class="form-control form-control-sm" aria-controls="example1"></label>
                                         <label class="mr-1">Jenis Akun:
-                                            <select type="select" name="acc_type" class="form-control form-control-sm"
+                                            <select type="select" name="acc_type" class="form-control form-control-sm" id="acc_type"
                                                 aria-controls="example1">
-                                                <option disabled selected>Pilih Jenis Akun</option>
+                                                <option disabled selected value="">Pilih Jenis Akun</option>
                                                 @foreach($acc_type as $key => $value)
                                                 <option {{ request('acc_type') == $key ? 'selected': '' }}
                                                     value="{{ $key }}">{{ $value }}</option>
@@ -65,7 +65,7 @@ $acc_type = [
                                         <button type="submit" class="btn btn-sm btn-secondary">Cari</button>
                                         <a href="{{ route('penerimaan-kas.index') }}" class="btn btn-sm btn-secondary">
                                             Reset </a>
-                                        <button id="btn-cetak" class="btn btn-sm btn-secondary">Cetak</button>
+                                        <button type="button" id="btn-cetak" class="btn btn-sm btn-secondary">Cetak</button>
                                 </div>
                                 </form>
                             </div>
@@ -340,7 +340,12 @@ $acc_type = [
 <script>
     $(document).ready(function () {
         $('#btn-cetak').click(function () {
-            $('#form-cari').attr('action', '/penerimaan-kas/cetak')
+            var search = $('#search').val() ?? '';
+            var date = $('#date').val() ?? ''; 
+            var month = $('#month').val() ?? '';
+            var acc_type = $('#acc_type').val() == null ? '' : $('#acc_type').val();
+            url = '{{ url("/penerimaan-kas/cetak") }}?search='+search+'&date='+date+'&month='+month+'&acc_type='+acc_type;
+            window.open(url, "_blank");
         });
         //script show
         $('.edit-penerimaan-kas-btn').click(function (e) {
