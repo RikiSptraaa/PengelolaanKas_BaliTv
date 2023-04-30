@@ -118,6 +118,12 @@ class ReportController extends Controller
         return view('report.neraca');
     }
     public function show_neraca(Request $request){
+        if($request->date == null){
+            return response()->json([
+                'status' => false,
+                'message' => "Silahkan Pilih Bulan Terlebihdahulu"
+            ], 400);
+        }
         $month = explode('-', $request['date']?? null);
 
         $date = $request->date == null ? date('Y-m-d') : $request->date;

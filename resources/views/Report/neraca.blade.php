@@ -91,6 +91,16 @@
                     // // countTotalBalance();
 
                 },
+                error: function(error){
+                    $('#btn-show').html('Cari').removeAttr('disabled');
+                    $('#btn-cetak').removeAttr('disabled');
+                    swal.fire({
+                        title: "Error",
+                        icon: "error",
+                        text: error.responseJSON.message,
+                        showConfirmButton: true,
+                    });
+                }
             });
         });
     });
