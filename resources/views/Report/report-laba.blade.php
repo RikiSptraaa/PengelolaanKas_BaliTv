@@ -34,30 +34,19 @@
                     <h3>Bali TV</h3>
                     <h4>Laporan Laba / Rugi<h4>
                         @php $yearMonth = $month[0].'-'.$month[1]  @endphp
-                            <p>Periode Yang Berakhir Pada {{ Carbon::parse($yearMonth)->format('F Y') }}</p>
+                            <p>Periode Yang Berakhir Pada {{ Carbon::parse($yearMonth)->translatedFormat('F Y') }}</p>
                 </td>
             </tr>
         </thead>
         <tbody>
-            @foreach($acc_income as $key => $value)
-            <tr>
-                <td>
-                    {{ '('.$value['invoice_number'].') ' . $value['description'] }}
-                </td>
-                <td>
-                    {{ Money::IDR($value['total'], true) }}
-                </td>
-
-            </tr>
-            @endforeach
             <tr>
                 <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">
                     Total Pendapatan
                 </td>
                 @php
                   
-                    $pendapatan = collect($acc_income)->sum('total') ?? 0;
-                    $beban = collect($acc_outgoing)->sum('total') ?? 0;                 
+                    $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
+                    $beban = collect($acc_outgoing)->where('acc_type', 1)->sum('total') ?? 0;                 
                     $laba = $pendapatan - $beban;
                 
                 @endphp
@@ -69,7 +58,7 @@
             <tr>
                 <td colspan="2" style="background-color: rgba(220, 220, 220, 0.477)">Beban :</td>
             </tr>
-            @foreach($acc_outgoing as $key => $value)
+            @foreach( collect($acc_outgoing)->where('acc_type', 1)->toArray() as $key => $value)
             <tr>
                 <td>
                     {{ '('.$value['note_number'].') ' . $value['description'] }}

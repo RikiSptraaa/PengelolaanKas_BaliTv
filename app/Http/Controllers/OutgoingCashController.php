@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\OutgoingCash;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class OutgoingCashController extends Controller
 {
@@ -19,42 +21,37 @@ class OutgoingCashController extends Controller
     {
         $data =  OutgoingCash::latest();
         $user = Auth::user();
-        $month = explode('-', $request['month']?? null);
 
-
-
-        if (request()->input('search')) {
-            $data = $data->Where('description', 'LIKE', '%' . request('search') . '%')->orWhere('note_number', 'LIKE', '%' . request('search') . '%');
-        }
-        if (request()->input('month')) {
-            $data = $data->whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0]);
-        }
         if (request()->input('date')) {
-            $data = $data->where('outgoing_date', '=',  request('date'));
+            $date = explode('-', request()->date);
+            $startDate = Carbon::createFromFormat('d/m/Y',trim($date[0]))->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d/m/Y',trim($date[1]))->format('Y-m-d');
+            $data = $data->whereBetween('outgoing_date', [$startDate, $endDate]);
         }
         if (request()->input('acc_type')) {
             $data =  $data->where('acc_type', '=', request()->acc_type);
         }
-
-        $data_print = $data->get()->toArray();
-
-
+        
         if($print){
+            $total = $data->sum('total');
+            $data_print = $data->get()->toArray();
       
-            return response()->json(['data' => $data_print]) ;
+            return response()->json(['data' => $data_print, 'total' => $total]) ;
         }
 
         $data = $data->paginate(10);
 
+        $totalPerPage = $data->sum('total');
 
-        return view('PengeluaranKas.index', compact('data', 'user'));
+        return view('PengeluaranKas.index', compact('data', 'totalPerPage' ,'user'));
     }
 
     public function print(Request $request){
-        $data = $this->index($request, true)->original;
-        $data = $data['data'];
+        $dataReq = $this->index($request, true)->original;
+        $data = $dataReq['data'];
+        $total = $dataReq['total'];
 
-        $pdf = Pdf::loadView('PengeluaranKas.pdf', compact('data'));
+        $pdf = Pdf::loadView('PengeluaranKas.pdf', compact('data', 'total'));
         return $pdf->stream('Pengeluaran Kas.pdf');
     }
     /**
@@ -80,7 +77,8 @@ class OutgoingCashController extends Controller
             "description" => 'required|max:50',
             "tanggal_pengeluaran" => "required|date",
             "jumlah" => "required|numeric",
-            "keterangan" => "required|max:100"
+            "keterangan" => "required|max:100",
+            "bukti_pengeluaran" => "required|mimes:jpg,pdf,png,jpeg,docx"
         ]);
 
         if ($validator->fails()) {
@@ -91,10 +89,14 @@ class OutgoingCashController extends Controller
                 "tanggal_pengeluaran" => $validator->errors()->get('tanggal_pengeluaran'),
                 "jumlah" => $validator->errors()->get('jumlah'),
                 "keterangan" => $validator->errors()->get('keterangan'),
+                "bukti_pengeluaran" => $validator->errors()->get('bukti_pengeluaran'),
                 "status" => false,
                 "message" => "Pengeluaran Kas Gagal Ditambah!"
             ], 422);
         }
+
+        $filename = md5(request()->file('bukti_pengeluaran')->getClientOriginalName() . time()) . '.' . request()->file('bukti_pengeluaran')->getClientOriginalExtension();
+        request()->file('bukti_pengeluaran')->move(public_path('bukti'), $filename);
 
         OutgoingCash::create([
             "user_id" => Auth::user()->id,
@@ -103,7 +105,8 @@ class OutgoingCashController extends Controller
             "description" => $request->description,
             "outgoing_date" => $request->tanggal_pengeluaran,
             "total" => $request->jumlah,
-            "note" => $request->keterangan
+            "note" => $request->keterangan,
+            "file" => $filename
         ]);
 
         return response()->json([
@@ -152,7 +155,8 @@ class OutgoingCashController extends Controller
             "description" => 'required|max:100',
             "tanggal_pengeluaran" => "required|date",
             "jumlah" => "required|numeric",
-            "keterangan" => "required|max:100"
+            "keterangan" => "required|max:100",
+            "bukti_pengeluaran" => "mimes:jpg,pdf,png,jpeg,docx"
         ]);
 
         // if ($request->nomor_nota == $pengeluaran_ka->note_number) {
@@ -173,19 +177,39 @@ class OutgoingCashController extends Controller
                 "tanggal_pengeluaran" => $validator->errors()->get('tanggal_pengeluaran'),
                 "jumlah" => $validator->errors()->get('jumlah'),
                 "keterangan" => $validator->errors()->get('keterangan'),
+                "bukti_pengeluaran" => $validator->errors()->get('bukti_pengeluaran'),
                 "status" => false,
                 "message" => "Pengeluaran Kas Gagal Diubah!"
             ], 422);
         }
 
-        $pengeluaran_ka->update([
+        $data = [
             "note_number" => $request->nomor_nota,
             "acc_type" => $request->acc_type,
             "description" => $request->description,
             "outgoing_date" => $request->tanggal_pengeluaran,
             "total" => $request->jumlah,
             "note" => $request->keterangan
-        ]);
+        ];
+        
+        
+        
+        if(isset($request->bukti_pengeluaran) && !is_null($request->bukti_pengeluaran)){
+            $old_file = $pengeluaran_ka->file;
+
+            
+
+            if (File::exists(public_path('bukti/').$old_file)) {
+                File::delete(public_path('bukti/').$old_file);
+            }
+
+            $filename = md5(request()->file('bukti_pengeluaran')->getClientOriginalName() . time()) . '.' . request()->file('bukti_pengeluaran')->getClientOriginalExtension();
+            request()->file('bukti_pengeluaran')->move(public_path('bukti'), $filename);
+            $data['file'] = $filename;
+        }
+
+
+        $pengeluaran_ka->update($data);
         return response()->json([
             "status" => true,
             "message" => "Pengeluaran Kas Berhasil Ditambah!"

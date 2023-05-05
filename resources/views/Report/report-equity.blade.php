@@ -31,7 +31,7 @@
                     <h3>Bali TV</h3>
                     <h4>Laporan Perubahan Equitas<h4>
                         @php $yearMonth = $month[0].'-'.$month[1]  @endphp
-                        <p>Periode Yang Berakhir Pada {{ Carbon::parse($yearMonth)->format('F Y') }}</p>
+                        <p>Periode Yang Berakhir Pada {{ Carbon::parse($yearMonth)->translatedFormat('F Y') }}</p>
                     {{-- <p>Periode Yang Berakhir Pada {{Carbon::parse($date)->format('F Y') }}</p> --}}
                 </td>
             </tr>

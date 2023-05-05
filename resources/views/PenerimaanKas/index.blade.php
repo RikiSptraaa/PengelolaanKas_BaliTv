@@ -20,9 +20,11 @@
 @php
 $acc_type = [
 1 => 'kas',
-2 => 'Pendapatan',
+2 => 'Pendapatan Kunjungan',
+3 => 'Pendapatan Iklan',
 4 => 'Perlengkapan',
 5 => 'Peralatan',
+6 => 'Pendapatan Liputan'
 ]
 @endphp
 
@@ -41,19 +43,10 @@ $acc_type = [
                                 <div id="example1_filter">
                                     <form action="" method="get" id="form-cari">
 
-                                        <label class="mr-1">Cari:<input type="text" name="search" id="search"
-                                                value="{{ request()->search ? request()->search : "" }}"
-                                                class="form-control form-control-sm" aria-controls="example1"></label>
-                                        <label class="mr-1">Tanggal:<input type="date" name="date" id="date"
-                                                value="{{ request()->date ? request()->date : "" }}"
-                                                class="form-control form-control-sm" aria-controls="example1"></label>
-                                        <label class="mr-1">Bulan:<input type="month" name="month" id="month"
-                                                value="{{ request()->month ? request()->month : "" }}"
-                                                class="form-control form-control-sm" aria-controls="example1"></label>
                                         <label class="mr-1">Jenis Akun:
                                             <select type="select" name="acc_type" class="form-control form-control-sm" id="acc_type"
                                                 aria-controls="example1">
-                                                <option disabled selected value="">Pilih Jenis Akun</option>
+                                                <option disabled selected>Pilih Jenis Akun</option>
                                                 @foreach($acc_type as $key => $value)
                                                 <option {{ request('acc_type') == $key ? 'selected': '' }}
                                                     value="{{ $key }}">{{ $value }}</option>
@@ -61,10 +54,11 @@ $acc_type = [
                                                 @endforeach
                                             </select>
                                         </label>
+                                        <label class="mr-1">Tanggal:<input type="text" name="date" id="date" readonly
+                                                value="{{ request()->date ? request()->date : null }}"
+                                                class="form-control form-control-sm daterange" style="background-color: transparent" autocomplete="off" aria-controls="example1"></label>
                                         <br>
                                         <button type="submit" class="btn btn-sm btn-secondary">Cari</button>
-                                        <a href="{{ route('penerimaan-kas.index') }}" class="btn btn-sm btn-secondary">
-                                            Reset </a>
                                         <button type="button" id="btn-cetak" class="btn btn-sm btn-secondary">Cetak</button>
                                 </div>
                                 </form>
@@ -119,9 +113,9 @@ $acc_type = [
                                             <td>{{ $value->invoice_number }}</td>
                                             <td>{{ $acc_type[$value->acc_type] }}</td>
                                             <td>{{ $value->description }}</td>
-                                            <td>{{  Carbon::parse($value->paid_date)->dayName .', ' .Carbon::parse($value->paid_date)->format('d F Y') }}
+                                            <td>{{  Carbon::parse($value->paid_date)->dayName .', ' .Carbon::parse($value->paid_date)->translatedFormat('d F Y') }}
                                             </td>
-                                            <td>{{ $value->total }}</td>
+                                            <td> @money($value->total, 'IDR', true)</td>
                                             <td>{{ $value->note }}</td>
                                             <td class='d-flex justify-content-center'>
                                                 <form>
@@ -144,9 +138,16 @@ $acc_type = [
                                         </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                          <td colspan="4" class="text-right text-bold">Total</td>
+                                          <td colspan="3"> @money($totalPerPage, 'IDR', true)</td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
+                        
                         {{-- Modal Tambah Data --}}
                         <div class="modal-create">
                             <div class="modal fade" id="modal-tambah" style="display: none;" aria-hidden="true">
@@ -172,10 +173,9 @@ $acc_type = [
                                                 <div class="form-group">
                                                     <label for="acc-type">Tipe Akun</label>
                                                     <select class="form-control" name="acc_type" id="acc-type">
-                                                        <option value="1">Kas</option>
-                                                        <option value="2">Pendapatan</option>
-                                                        <option value="4">Perlengkapan</option>
-                                                        <option value="5">Peralatan</option>
+                                                        @foreach($acc_type as $key => $value)
+                                                            <option value="{{ $key }}">{{ $value }}</option>
+                                                        @endforeach
                                                     </select>
                                                     <div style="color: red; display: none;" class="error-acc-type">
                                                     </div>
@@ -209,6 +209,15 @@ $acc_type = [
                                                         placeholder="Masukan Ketrangan" cols="50" class="form-control"
                                                         style="display: block"></textarea>
                                                     <div style="color: red; display: none;" class="error-keterangan">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="bukti_penerimaan">Bukti</label>
+
+                                                    <input type="file" name="bukti_penerimaan" class="form-control h-100" >
+                                                    <small style="color: grey">Klik atau tarik file untuk mengisi</small>
+                                                
+                                                    <div style="color: red; display: none;" class="error-bukti">
                                                     </div>
                                                 </div>
 
@@ -256,11 +265,9 @@ $acc_type = [
                                                 <div class="form-group">
                                                     <label for="edit-acc-type">Tipe Akun</label>
                                                     <select class="form-control" name="acc_type" id="edit-acc-type">
-                                                        <option value="1">Kas</option>
-                                                        <option value="2">Pendapatan</option>
-                                                        <option value="3">Perlengkapan</option>
-                                                        <option value="4">Peralatan</option>
-                                                        <option value="5">Akumulasi Penyusutan</option>
+                                                        @foreach($acc_type as $key => $value)
+                                                        <option value="{{ $key }}">{{ $value }}</option>
+                                                        @endforeach
                                                     </select>
                                                     <div style="color: red; display: none;" class="error-edit-acc-type">
                                                     </div>
@@ -297,6 +304,15 @@ $acc_type = [
                                                         class="error-edit-keterangan">
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="bukti_penerimaan">Bukti</label>
+
+                                                    <input type="file" name="bukti_penerimaan" class="form-control h-100" id="edit-bukti" >
+                                                    <small style="color: grey">Klik atau tarik file untuk mengisi</small>
+                                                
+                                                    <div style="color: red; display: none;" class="error-edit-bukti">
+                                                    </div>
+                                                </div>
 
                                         </div>
                                         <div class="modal-footer justify-content-between">
@@ -326,7 +342,7 @@ $acc_type = [
                         </div>
                     </div>
                 </div>
-
+              
             </div>
         </div>
     </div>
@@ -339,12 +355,13 @@ $acc_type = [
 @section('script')
 <script>
     $(document).ready(function () {
+
         $('#btn-cetak').click(function () {
             var search = $('#search').val() ?? '';
             var date = $('#date').val() ?? ''; 
             var month = $('#month').val() ?? '';
             var acc_type = $('#acc_type').val() == null ? '' : $('#acc_type').val();
-            url = '{{ url("/penerimaan-kas/cetak") }}?search='+search+'&date='+date+'&month='+month+'&acc_type='+acc_type;
+            url = '{{ url("/penerimaan-kas/cetak") }}?acc_type='+acc_type+'&date='+date;
             window.open(url, "_blank");
         });
         //script show
@@ -427,7 +444,6 @@ $acc_type = [
                                 title: 'Berhasil!',
                                 text: response.message,
                             }).then((result) => {
-                                $("#modal-update").modal("hide");
                                 $('.error-edit-no-invoice').css('display',
                                     'none');
                                 $('.error-edit-acc-type').css('display',
@@ -439,6 +455,8 @@ $acc_type = [
                                 $('.error-edit-jumlah').css('display',
                                     'none');
                                 $('.error-edit-keterangan').css('display',
+                                    'none');
+                                $('.error-edit-bukti').css('display',
                                     'none');
                                 location.reload();
                             });
@@ -467,6 +485,9 @@ $acc_type = [
                             $('.error-edit-keterangan').text(error
                                 .responseJSON
                                 .keterangan).css('display', '');
+                            $('.error-edit-bukti').text(error
+                                .responseJSON
+                                .bukti_penerimaan).css('display', '');
                         },
 
                     });
@@ -557,7 +578,7 @@ $acc_type = [
                                 title: 'Berhasil!',
                                 text: response.message,
                             }).then((result) => {
-                                $("#modal-tambah").modal("hide");
+                                // $("#modal-tambah").modal("hide");
                                 location.reload()
                             });
 
@@ -581,6 +602,8 @@ $acc_type = [
                                 .jumlah).css('display', '');
                             $('.error-keterangan').text(error.responseJSON
                                 .keterangan).css('display', '');
+                            $('.error-bukti').text(error.responseJSON
+                                .bukti_penerimaan).css('display', '');
                             // $('#error-image').css('display', '');
                         },
                     });

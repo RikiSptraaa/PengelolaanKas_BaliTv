@@ -35,11 +35,14 @@ use Carbon\Carbon;
 use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
 $acc_type = [
-1 => "Beban",
+1 => "Beban Listrik",
 2 => "Utang Usaha",
 3 => "Utang Upah",
 4 => "Prive",
-5 => "Akumulasi Penyusutan"
+5 => "Akumulasi Penyusutan",
+6 => "Beban Air",
+7 => "Beban Listrik",
+8 => "Beban Telepon"
 ]
 @endphp
 
@@ -79,12 +82,18 @@ $acc_type = [
                 <td>{{ $value['note_number'] }}</td>
                 <td>{{ $acc_type[$value['acc_type']]  }}</td>
                 <td>{{ $value['description'] }}</td>
-                <td>{{ Carbon::parse($value['outgoing_date'])->dayName .', ' .Carbon::parse($value['outgoing_date'])->format('d F Y')  }}</td>
+                <td>{{ Carbon::parse($value['outgoing_date'])->dayName .', ' .Carbon::parse($value['outgoing_date'])->translatedFormat('d F Y')  }}</td>
                 <td>{{ Money::IDR($value['total'], true) }}</td>
                 <td>{{ $value['note'] }}</td>
             </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+              <td colspan="4" class="text-right text-bold">Total</td>
+              <td colspan="2"> @money($total, 'IDR', true)</td>
+            </tr>
+        </tfoot>
     </table>
 
 </body>

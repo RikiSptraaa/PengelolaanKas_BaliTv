@@ -24,7 +24,8 @@ class IncomingCash extends Model
         'acc_type',
         'paid_date',
         'total',
-        'note'
+        'note',
+        'file'
 
     ];
 

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IncomingCash;
-use Illuminate\Validation\Rule;
+use Carbon\Carbon;
+use Akaunting\Money\Money;
 // use Illuminate\Http\Request;
+use App\Models\IncomingCash;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class IncomingCashController extends Controller
 {
@@ -18,37 +21,43 @@ class IncomingCashController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, $print = false)
-    {
-        $request = request()->all();
+    {     
+         
+        
         $user = Auth::user();
-        $month = explode('-', $request['month']?? null);
+        
+        
         $data = IncomingCash::latest();
-        if (Request::input('search')) {
-            $data =  $data->where('invoice_number', 'LIKE', '%' . request()->search . '%')->orWhere('description', 'LIKE', '%' . request()->search . '%');
-        }
-        if (Request::input('month')) {
-            $data =  $data->whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0]);
+        if (request()->input('acc_type')) {
+            $data =  $data->where('acc_type', '=', request()->acc_type);
         }
         if (Request::input('date')) {
-            $data = $data->where('paid_date', '=',  request('date'));
-        }
-        if (Request::input('acc_type')) {
-            $data =  $data->where('acc_type', '=', request()->acc_type);
+            $date = explode('-', request()->date);
+            $startDate = Carbon::createFromFormat('d/m/Y',trim($date[0]))->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d/m/Y',trim($date[1]))->format('Y-m-d');
+            $data = $data->whereBetween('paid_date', [$startDate, $endDate]);
         }
 
         if($print){
+            $total = $data->sum('total');
             $data_print = $data->get()->toArray();
-            return response()->json(['data' => $data_print]);
+            return response()->json(['data' => $data_print, 'total' => $total]);
         }
+        
         $data = $data->paginate(10);
-        return view('PenerimaanKas.index', compact('data', 'user'))->with('request');
+
+        $totalPerPage = $data->sum('total');
+        return view('PenerimaanKas.index', compact('data', 'totalPerPage' ,'user'))->with('request');
     }
 
     public function print(Request $request){
-        $data = $this->index($request, true)->original;
-        $data = $data['data'];
+        $dataReq = $this->index($request, true)->original;
+        $data = $dataReq['data'];
+        $total = $dataReq['total'];
 
-        $pdf = Pdf::loadView('PenerimaanKas.pdf', compact('data'));
+
+
+        $pdf = Pdf::loadView('PenerimaanKas.pdf', compact('data','total'));
         return $pdf->stream('Penerimaan Kas.pdf');
     }
 
@@ -76,7 +85,8 @@ class IncomingCashController extends Controller
             'description' => 'required|max:50',
             'tanggal_bayar' => 'required|date',
             'jumlah' => 'required|numeric',
-            'keterangan' => 'required|max:100'
+            'keterangan' => 'required|max:100',
+            "bukti_penerimaan" => "required|mimes:jpg,pdf,png,jpeg,docx"
         ]);
 
         if ($validator->fails()) {
@@ -87,10 +97,14 @@ class IncomingCashController extends Controller
                 'tanggal_bayar' => $validator->errors()->get('tanggal_bayar'),
                 'jumlah' => $validator->errors()->get('jumlah'),
                 'keterangan' => $validator->errors()->get('keterangan'),
+                "bukti_penerimaan" => $validator->errors()->get('bukti_penerimaan'),
                 'status' => false,
                 'message' => "Penerimaan Kas Gagal Ditambah!"
             ], 422);
         }
+
+        $filename = md5(request()->file('bukti_penerimaan')->getClientOriginalName() . time()) . '.' . request()->file('bukti_penerimaan')->getClientOriginalExtension();
+        request()->file('bukti_penerimaan')->move(public_path('bukti'), $filename);
 
         IncomingCash::create([
             'user_id' => Auth::user()->id,
@@ -100,6 +114,7 @@ class IncomingCashController extends Controller
             'paid_date' => request()->tanggal_bayar,
             'total' => request()->jumlah,
             'note' => request()->keterangan,
+            'file' => $filename 
         ]);
 
         return response()->json([
@@ -141,8 +156,7 @@ class IncomingCashController extends Controller
      */
     public function update(Request $request, IncomingCash $penerimaan_ka)
     {
-        // dd(request()->all());
-        // if (request()->nomor_invoice == $penerimaan_ka->invoice_number) {
+    
 
         $validator = Validator::make(request()->all(), [
             'nomor_invoice' => 'required|max:50|unique:incoming_cash,invoice_number,' . $penerimaan_ka->id,
@@ -151,7 +165,8 @@ class IncomingCashController extends Controller
             'description' => 'required|max:50',
             'tanggal_bayar' => 'date|required',
             'jumlah' => 'numeric|required',
-            'keterangan' => 'required|max:100'
+            'keterangan' => 'required|max:100',
+            "bukti_penerimaan" => "mimes:jpg,pdf,png,jpeg,docx"
         ]);
         // } 
 
@@ -162,19 +177,36 @@ class IncomingCashController extends Controller
                 'tanggal_bayar' => $validator->errors()->get('tanggal_bayar'),
                 'jumlah' => $validator->errors()->get('jumlah'),
                 'keterangan' => $validator->errors()->get('keterangan'),
+                "bukti_penerimaan" => $validator->errors()->get('bukti_penerimaan'),
                 'status' => false,
                 'message' => "Penerimaan Kas Gagal Ditambah!"
             ], 422);
         }
 
-        $penerimaan_ka->update([
+        $data = [
             'invoice_number' => request()->nomor_invoice,
             'acc_type' => request()->acc_type,
             'description' => request()->description,
             'paid_date' => request()->tanggal_bayar,
             'total' => request()->jumlah,
             'note' => request()->keterangan,
-        ]);
+        ];
+
+          if(isset(request()->bukti_penerimaan) && !is_null(request()->bukti_penerimaan)){
+            $old_file = $penerimaan_ka->file;
+
+            
+
+            if (File::exists(public_path('bukti/').$old_file)) {
+                File::delete(public_path('bukti/').$old_file);
+            }
+
+            $filename = md5(request()->file('bukti_penerimaan')->getClientOriginalName() . time()) . '.' . request()->file('bukti_penerimaan')->getClientOriginalExtension();
+            request()->file('bukti_penerimaan')->move(public_path('bukti'), $filename);
+            $data['file'] = $filename;
+          }
+
+        $penerimaan_ka->update($data);
 
         return response()->json([
             'status' => true,

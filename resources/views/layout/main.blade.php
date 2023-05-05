@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
     <title>Bali TV</title>
     @include('templates.header')
@@ -46,9 +47,6 @@
         {{-- @include('templates.footer') --}}
         <footer class="main-footer">
 
-            <div class="float-right d-none d-sm-inline">
-                Anything you want
-            </div>
 
             <strong> &copy; 2022 <a href="https://balitv.tv/">Bali TV</a>.</strong>
         </footer>
@@ -85,6 +83,27 @@
     <script src="{{ asset('Admin-Lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('Admin-Lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('Admin-Lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script>
+    $(document).ready(function(){      
+        $('.daterange').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'DD/MM/YYYY'
+            }
+        });
+
+        $('.daterange').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+        });
+
+        $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+    });
+    </script>
 
     @yield('script')
 

@@ -34,7 +34,7 @@ use Akaunting\Money\Money;
                 <h4>Laporan Neraca<h4>
                     @php $yearMonth = $month[0].'-'.$month[1]  @endphp
                         <p>Periode Yang Berakhir Pada
-                            {{ Carbon::parse($yearMonth)->format('F Y') }}</p>
+                            {{ Carbon::parse($yearMonth)->translatedFormat('F Y') }}</p>
             </td>
         </tr>
         <tr class="text-center" style="background-color: rgba(220, 220, 220, 0.477);">
