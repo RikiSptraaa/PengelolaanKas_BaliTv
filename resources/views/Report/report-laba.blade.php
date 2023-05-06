@@ -2,6 +2,10 @@
     use Carbon\Carbon;
     use Akaunting\Money\Currency;
     use Akaunting\Money\Money;
+
+    $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
+    $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6])->sum('total') ?? 0;                 
+    $laba = $pendapatan - $beban;
 @endphp
 @if(isset($is_print))
 <style>
@@ -40,16 +44,24 @@
         </thead>
         <tbody>
             <tr>
+                <td colspan="2" style="background-color: rgba(220, 220, 220, 0.477)">Pendapatan :</td>
+            </tr>
+            @foreach( collect($acc_income)->whereIn('acc_type', [2,3,6])->toArray() as $key => $value)
+            <tr>
+                <td>
+                    {{ '('.$value['invoice_number'].') ' . $value['description'] }}
+                </td>
+                <td>
+                    {{ Money::IDR($value['total'], true) }}
+                </td>
+
+            </tr>
+            @endforeach
+
+            <tr>
                 <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">
                     Total Pendapatan
                 </td>
-                @php
-                  
-                    $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
-                    $beban = collect($acc_outgoing)->where('acc_type', 1)->sum('total') ?? 0;                 
-                    $laba = $pendapatan - $beban;
-                
-                @endphp
                 <td style="background-color: {{ isset($is_print) ? 'rgba(86, 220, 220, 0.477)' : 'rgba(220, 220, 220, 0.477)'  }}">
                     {{ Money::IDR($pendapatan, true) }}
 
@@ -58,7 +70,7 @@
             <tr>
                 <td colspan="2" style="background-color: rgba(220, 220, 220, 0.477)">Beban :</td>
             </tr>
-            @foreach( collect($acc_outgoing)->where('acc_type', 1)->toArray() as $key => $value)
+            @foreach( collect($acc_outgoing)->whereIn('acc_type', [1,6])->toArray() as $key => $value)
             <tr>
                 <td>
                     {{ '('.$value['note_number'].') ' . $value['description'] }}

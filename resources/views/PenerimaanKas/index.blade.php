@@ -134,6 +134,9 @@ $acc_type = [
                                                     <i class='fas fa-edit edit-icon'
                                                         style="color: rgb(75, 111, 255);"></i>
                                                 </button>
+                                                <a id="btn-download" data-toggle="tooltip" data-placement="top" title="Download/Unduh Bukti" 
+                                                class='margin-right text-center' href="{{ asset('bukti').'/'.$value->file }}" download > <i class='fas fa-download edit-icon'
+                                                    style="color: rgb(75, 111, 255);"></i></a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -214,7 +217,7 @@ $acc_type = [
                                                 <div class="form-group">
                                                     <label for="bukti_penerimaan">Bukti</label>
 
-                                                    <input type="file" name="bukti_penerimaan" class="form-control h-100" >
+                                                    <input type="file" name="bukti_penerimaan" class="form-control h-100"  accept="image/*,.pdf,.docx">
                                                     <small style="color: grey">Klik atau tarik file untuk mengisi</small>
                                                 
                                                     <div style="color: red; display: none;" class="error-bukti">
@@ -307,7 +310,8 @@ $acc_type = [
                                                 <div class="form-group">
                                                     <label for="bukti_penerimaan">Bukti</label>
 
-                                                    <input type="file" name="bukti_penerimaan" class="form-control h-100" id="edit-bukti" >
+                                                    <input type="file"  
+                                                     name="bukti_penerimaan" class="form-control h-100" id="edit-bukti"  accept="image/*,.pdf,.docx">
                                                     <small style="color: grey">Klik atau tarik file untuk mengisi</small>
                                                 
                                                     <div style="color: red; display: none;" class="error-edit-bukti">

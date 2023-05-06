@@ -76,8 +76,8 @@ class ReportController extends Controller
         $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
         $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
 
-        $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
-        $beban = collect($acc_outgoing)->where('acc_type', 1)->sum('total') ?? 0;                 
+        $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
+        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6])->sum('total') ?? 0;                    
         $laba_bersih = $pendapatan - $beban;
 
         return response()->json([

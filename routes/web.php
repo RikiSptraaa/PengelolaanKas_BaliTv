@@ -62,6 +62,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/laporan/laba', [ReportController::class, 'index']);
     Route::post('/laporan/laba', [ReportController::class, 'show']);
     Route::get('/laporan/laba/cetak', [ReportController::class, 'printLaba']);
+
+    Route::get("/download/{file}", function ($file) {
+        dd($file);
+        // return 
+    });
     
 
 });

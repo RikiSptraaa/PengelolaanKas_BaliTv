@@ -21,13 +21,12 @@
 use Carbon\Carbon;
 
 $acc_type = [
-1 => "Beban Listrik",
+1 => "Beban Usaha",
 2 => "Utang Usaha",
 3 => "Utang Upah",
 4 => "Prive",
 5 => "Akumulasi Penyusutan",
-6 => "Beban Air",
-7 => "Beban Telepon"
+6 => "Beban Air, Listrik, Dan Telepon",
 ]
 @endphp
 
@@ -137,7 +136,7 @@ $acc_type = [
                                                     <i class='fas fa-edit edit-icon'
                                                         style="color: rgb(75, 111, 255);"></i>
                                                 </button>
-                                                <a class='edit-pengeluaran-kas-btn margin-right text-center'  href="{{ asset('bukti').'/'.$value->file }}" download > <i class='fas fa-download edit-icon'
+                                                <a id="btn-download" data-toggle="tooltip" data-placement="top" title="Download/Unduh Bukti" class='margin-right text-center' href="{{ asset('bukti').'/'.$value->file }}" download > <i class='fas fa-download edit-icon'
                                                 style="color: rgb(75, 111, 255);"></i></a>
                                             </td>
                                         </tr>
@@ -219,7 +218,7 @@ $acc_type = [
                                                 <div class="form-group">
                                                     <label for="bukti_pengeluaran">Bukti</label>
 
-                                                    <input type="file" name="bukti_pengeluaran" class="form-control h-100" >
+                                                    <input type="file" name="bukti_pengeluaran" class="form-control h-100" accept="image/*,.pdf,.docx" >
                                                     <small style="color: grey">Klik atau tarik file untuk mengisi</small>
                                                 
                                                     <div style="color: red; display: none;" class="error-bukti">
@@ -314,7 +313,7 @@ $acc_type = [
                                                 <div class="form-group">
                                                     <label for="bukti_pengeluaran">Bukti</label>
 
-                                                    <input type="file" name="bukti_pengeluaran" class="form-control h-100" id="edit-bukti" >
+                                                    <input type="file" name="bukti_pengeluaran" class="form-control h-100" id="edit-bukti" accept="image/*,.pdf,.docx" >
                                                     <small style="color: grey">Klik atau tarik file untuk mengisi</small>
                                                 
                                                     <div style="color: red; display: none;" class="error-edit-bukti">
@@ -368,6 +367,21 @@ $acc_type = [
             url = '{{ url("/pengeluaran-kas/cetak") }}?acc_type='+acc_type+'&date='+date;
             window.open(url, "_blank");
         });
+        // $('#btn-download').click(function (e) {
+        //     e.preventDefault;
+        //     var fileUrl =$(this).attr('href');
+        //     // Create a new anchor tag
+        //     var downloadLink = $("<a>");
+
+        //     // Set the href attribute to the file URL
+        //     downloadLink.attr("href", fileUrl);
+
+        //     // Add the download attribute to the anchor tag
+        //     downloadLink.attr("download", "");
+
+        //     // Trigger a click event on the anchor tag to start the download
+        //     downloadLink[0].click();
+        // });
         //script show
         $('.edit-pengeluaran-kas-btn').click(function (e) {
             var nomor_nota = $(this).data('id');
