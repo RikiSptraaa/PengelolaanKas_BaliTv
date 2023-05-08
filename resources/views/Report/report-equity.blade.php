@@ -44,7 +44,7 @@
                 @php
                     use Akaunting\Money\Currency;
                     use Akaunting\Money\Money;
-                    $modal_awal = collect($acc_income)->whereIn('acc_type', [1,2] )->sum('total') ?? 0;
+                    $modal_awal = collect($acc_income)->whereIn('acc_type', 7 )->sum('total') ?? 0;
                     // $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
                     $prive = collect($acc_outgoing)->where('acc_type', 4)->sum('total');    
                     // $laba = $pendapatan - $beban;

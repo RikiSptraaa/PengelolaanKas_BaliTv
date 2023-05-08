@@ -405,7 +405,7 @@
                                 title: 'Berhasil!',
                                 text: response.message,
                             }).then((result) => {
-                                $("#modal-update-user").modal("hide");
+                                // $("#modal-update-user").modal("hide");
                                 $('.error-name').hide();
                                 $('.error-username').hide();
                                 $('.error-old-password').hide();
@@ -475,7 +475,7 @@
                                 title: 'Berhasil!',
                                 text: 'Pengguna berhasil ditambah',
                             }).then((result) => {
-                                $("#modal-add-user").modal("hide");
+                                // $("#modal-add-user").modal("hide");
                                 location.reload()
                             });
 
