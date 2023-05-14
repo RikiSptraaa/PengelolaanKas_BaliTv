@@ -80,7 +80,7 @@ use Akaunting\Money\Money;
             <td>Perlengkapan</td>
             <td style="width: 20%">{{  Money::IDR(collect($acc_income)->where('acc_type', 4)->sum('total'), true)   }}
             </td>
-            <td>Beban Usaha</td>
+            <td>Beban Sewa</td>
             <td>{{  Money::IDR(collect($acc_outgoing)->whereIn('acc_type', 1)->sum('total'), true)   }}</td>
         </tr>
         <tr>
@@ -91,11 +91,19 @@ use Akaunting\Money\Money;
             <td style="width: 20%">{{  Money::IDR(collect($acc_outgoing)->where('acc_type', 5)->sum('total'), true) }}</td>
             
         </tr>
+        <tr>
+            <td>-</td>
+            <td style="width: 20%">-
+            </td>
+            <td>Beban Peralatan</td>
+            <td style="width: 20%">{{  Money::IDR(collect($acc_outgoing)->where('acc_type', 7)->sum('total'), true) }}</td>
+            
+        </tr>
         <tr >
             <td style="background-color: rgba(220, 220, 220, 0.477);">Jumlah Aktiva Lancar</td>
             <td style="background-color: rgba(220, 220, 220, 0.477);">{{ Money::IDR(collect($acc_income)->whereIn('acc_type', [1,2,3,4,6])->sum('total'), true) }}</td>
-            <td>-</td>
-            <td style="width: 20%">-</td>
+            <td>Beban Administrasi</td>
+            <td style="width: 20%">{{  Money::IDR(collect($acc_outgoing)->where('acc_type', 8)->sum('total'), true) }}</td>
         </tr>
         <tr>
             <td colspan="2" style="background-color: rgba(220, 220, 220, 0.477);">

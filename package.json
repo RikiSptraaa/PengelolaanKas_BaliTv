@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "jquery.magnify": "^1.6.3",
         "moment": "^2.29.4",
         "sweetalert2": "^11.6.5"
     }

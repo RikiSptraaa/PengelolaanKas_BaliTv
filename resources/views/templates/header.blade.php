@@ -11,6 +11,8 @@
 <link rel="stylesheet" href="{{ asset('Admin-Lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('Admin-Lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('Admin-Lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('Js-Magnify/jquery.magnify.css') }}">
+<link rel="stylesheet" href="{{ asset('Js-Magnify/magnify-bezelless-theme.css') }}">
     {{-- <script nonce="ebbc264f-1d92-4319-a1a8-edbcd049ef43">
         (function (w, d) {
             ! function (Z, _, ba, bb) {

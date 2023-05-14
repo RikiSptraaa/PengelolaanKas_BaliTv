@@ -81,7 +81,7 @@ $acc_type = [
                                     <thead>
                                         <tr>
                                             <th tabindex="0" rowspan="1" colspan="1">
-                                                Nomor Invoice</th>
+                                                No Invoice</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Jenis Akun</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
@@ -95,6 +95,10 @@ $acc_type = [
                                             <th tabindex="0" rowspan="1" colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
                                                 Keterangan
+                                            </th>
+                                            <th tabindex="0" rowspan="1" colspan="1"
+                                                aria-label="Engine version: activate to sort column ascending">
+                                                Bukti
                                             </th>
                                             <th tabindex="0" rowspan="1" colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
@@ -118,26 +122,49 @@ $acc_type = [
                                             </td>
                                             <td> @money($value->total, 'IDR', true)</td>
                                             <td>{{ $value->note }}</td>
-                                            <td class='d-flex justify-content-center'>
-                                                <form>
-                                                    @csrf
-                                                    @method('delete')
-                                                    <input type="hidden" id="invoice_number"
-                                                        value="{{ $value->invoice_number }}">
-                                                    <button style='border: none; background-color: transparent;'
-                                                        class='delete-btn mr-2 text-center'><i style='color: red;'
-                                                            class='fas fa-trash del-icon'></i></button>
-                                                </form>
-                                                <button class='edit-penerimaan-kas-btn margin-right text-center'
-                                                    id="edit-user-btn" data-toggle="modal" data-target="#modal-update"
-                                                    data-id="{{ $value->invoice_number }}"
-                                                    style='border: none; background-color: transparent;'>
-                                                    <i class='fas fa-edit edit-icon'
-                                                        style="color: rgb(75, 111, 255);"></i>
-                                                </button>
-                                                <a id="btn-download" data-toggle="tooltip" data-placement="top" title="Download/Unduh Bukti" 
-                                                class='margin-right text-center' href="{{ asset('bukti').'/'.$value->file }}" download > <i class='fas fa-download edit-icon'
-                                                    style="color: rgb(75, 111, 255);"></i></a>
+                                            <td>
+                                                @php
+                                                    $fileExt = explode(".", $value->file);
+                                                @endphp
+                                                @if($fileExt[1] != 'pdf') 
+                                                <span class="text-center">
+                                                    <a data-magnify="gallery" data-src="" data-caption="Bukti" data-group="a" href="{{ asset('bukti').'/'.$value->file }}">
+                                                        <img src="{{ asset('bukti').'/'.$value->file }}" class="rounded img-thumbnail" alt="..." onclick="openFile({{ asset('bukti').'/'.$value->file }})">
+                                                    </a>
+                                                </span>
+                                                @else
+                                                <span class="text-center">
+                                                    <a href="{{ asset('bukti').'/'.$value->file }}" target="_blank">
+                                                        <button class="btn btn-sm btn-secondary">
+                                                            Perlihatkan File
+                                                        </button>
+                                                    </a>
+                                                </span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <div class='d-flex justify-content-center'>
+                                                    
+                                                    <form>
+                                                        @csrf
+                                                        @method('delete')
+                                                        <input type="hidden" id="invoice_number"
+                                                            value="{{ $value->invoice_number }}">
+                                                        <button style='border: none; background-color: transparent;'
+                                                            class='delete-btn mr-2 text-center'><i style='color: red;'
+                                                                class='fas fa-trash del-icon'></i></button>
+                                                    </form>
+                                                    <button class='edit-penerimaan-kas-btn margin-right text-center'
+                                                        id="edit-user-btn" data-toggle="modal" data-target="#modal-update"
+                                                        data-id="{{ $value->invoice_number }}"
+                                                        style='border: none; background-color: transparent;'>
+                                                        <i class='fas fa-edit edit-icon'
+                                                            style="color: rgb(75, 111, 255);"></i>
+                                                    </button>
+                                                    <a id="btn-download" data-toggle="tooltip" data-placement="bottom" title="Download/Unduh Bukti" 
+                                                    class='margin-right text-center' href="{{ asset('bukti').'/'.$value->file }}" download > <i class='fas fa-download edit-icon'
+                                                        style="color: rgb(75, 111, 255);"></i></a>
+                                                </div>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -145,7 +172,7 @@ $acc_type = [
                                     <tfoot>
                                         <tr>
                                           <td colspan="4" class="text-right text-bold">Total</td>
-                                          <td colspan="3"> @money($totalPerPage, 'IDR', true)</td>
+                                          <td colspan="4"> @money($totalPerPage, 'IDR', true)</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -360,6 +387,7 @@ $acc_type = [
 @section('script')
 <script>
     $(document).ready(function () {
+   
 
         $('#btn-cetak').click(function () {
             var search = $('#search').val() ?? '';

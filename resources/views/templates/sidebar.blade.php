@@ -17,7 +17,10 @@
                 <a href="#" class="d-block text-center">{{ Auth::user()->name }}</a>
                 @if(Auth::user()->is_super_admin == 1)
 
-                <p class="text-sm d-block" style="color: white; margin: unset;">Super Admin</p>
+                <p class="text-sm d-block" style="color: white; margin: unset;">Kasir</p>
+                @else
+                <p class="text-sm d-block" style="color: white; margin: unset;">Pimpinan</p>
+
                 @endif
             </div>
         </div>

@@ -4,7 +4,7 @@
     use Akaunting\Money\Money;
 
     $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
-    $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6])->sum('total') ?? 0;                 
+    $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                 
     $laba = $pendapatan - $beban;
 @endphp
 @if(isset($is_print))
@@ -70,7 +70,7 @@
             <tr>
                 <td colspan="2" style="background-color: rgba(220, 220, 220, 0.477)">Beban :</td>
             </tr>
-            @foreach( collect($acc_outgoing)->whereIn('acc_type', [1,6])->toArray() as $key => $value)
+            @foreach( collect($acc_outgoing)->whereIn('acc_type', [1,6, 7, 8])->toArray() as $key => $value)
             <tr>
                 <td>
                     {{ '('.$value['note_number'].') ' . $value['description'] }}
