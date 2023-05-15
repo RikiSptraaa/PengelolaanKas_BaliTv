@@ -49,7 +49,7 @@
             @foreach( collect($acc_income)->whereIn('acc_type', [2,3,6])->toArray() as $key => $value)
             <tr>
                 <td>
-                    {{ '('.$value['invoice_number'].') ' . $value['description'] }}
+                    {{ '('.$value['invoice_number'].') ' . $value['note'] }}
                 </td>
                 <td>
                     {{ Money::IDR($value['total'], true) }}
@@ -73,7 +73,7 @@
             @foreach( collect($acc_outgoing)->whereIn('acc_type', [1,6, 7, 8])->toArray() as $key => $value)
             <tr>
                 <td>
-                    {{ '('.$value['note_number'].') ' . $value['description'] }}
+                    {{ '('.$value['note_number'].') ' . $value['note'] }}
                 </td>
                 <td>
                     {{ Money::IDR($value['total'], true) }}

@@ -27,7 +27,7 @@ class IncomingCashController extends Controller
         $user = Auth::user();
         
         
-        $data = IncomingCash::latest();
+        $data = IncomingCash::orderBy('paid_date', 'asc');
         if (request()->input('acc_type')) {
             $data =  $data->where('acc_type', '=', request()->acc_type);
         }

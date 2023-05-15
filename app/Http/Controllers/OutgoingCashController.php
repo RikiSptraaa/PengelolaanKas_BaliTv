@@ -19,7 +19,7 @@ class OutgoingCashController extends Controller
      */
     public function index(Request $request, $print = false)
     {
-        $data =  OutgoingCash::latest();
+        $data =  OutgoingCash::orderBy('outgoing_date', 'asc');
         $user = Auth::user();
 
         if (request()->input('date')) {

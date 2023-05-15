@@ -35,14 +35,14 @@ use Carbon\Carbon;
 use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
 $acc_type = [
-1 => "Beban Listrik",
+1 => "Beban Sewa",
 2 => "Utang Usaha",
 3 => "Utang Upah",
 4 => "Prive",
 5 => "Akumulasi Penyusutan",
-6 => "Beban Air",
-7 => "Beban Listrik",
-8 => "Beban Telepon"
+6 => "Beban Air, Listrik, Dan Telepon",
+7 => "Beban Peralatan",
+8 => "Beban Administrasi"
 ]
 @endphp
 

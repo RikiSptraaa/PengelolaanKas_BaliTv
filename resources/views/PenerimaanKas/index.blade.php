@@ -127,19 +127,19 @@ $acc_type = [
                                                     $fileExt = explode(".", $value->file);
                                                 @endphp
                                                 @if($fileExt[1] != 'pdf') 
-                                                <span class="text-center">
+                                                <div class="text-center">
                                                     <a data-magnify="gallery" data-src="" data-caption="Bukti" data-group="a" href="{{ asset('bukti').'/'.$value->file }}">
                                                         <img src="{{ asset('bukti').'/'.$value->file }}" class="rounded img-thumbnail" alt="..." onclick="openFile({{ asset('bukti').'/'.$value->file }})">
                                                     </a>
-                                                </span>
+                                                </div>
                                                 @else
-                                                <span class="text-center">
+                                                <div class="text-center">
                                                     <a href="{{ asset('bukti').'/'.$value->file }}" target="_blank">
                                                         <button class="btn btn-sm btn-secondary">
                                                             Perlihatkan File
                                                         </button>
                                                     </a>
-                                                </span>
+                                                </div>
                                                 @endif
                                             </td>
                                             <td>

@@ -79,7 +79,7 @@ $acc_type = [
                         </div>
                         <div class="row table-responsive">
                             <div class="col-sm-12">
-                                <table id="user-table" class="table table-bordered table-striped dtr-inline"
+                                <table id="user-table" class="table table-bordered table-striped dataTable dtr-inline"
                                     aria-describedby="example1_info" style="overflow: scroll;">
                                     <thead>
                                         <tr>
@@ -246,7 +246,7 @@ $acc_type = [
                                                 <div class="form-group">
                                                     <label for="bukti_pengeluaran">Bukti</label>
 
-                                                    <input type="file" name="bukti_pengeluaran" class="form-control h-100" accept="image/*,.pdf,.docx" >
+                                                    <input type="file" name="bukti_pengeluaran" class="form-control h-100" accept="image/*,.pdf" >
                                                     <small style="color: grey">Klik atau tarik file untuk mengisi</small>
                                                 
                                                     <div style="color: red; display: none;" class="error-bukti">
@@ -341,7 +341,7 @@ $acc_type = [
                                                 <div class="form-group">
                                                     <label for="bukti_pengeluaran">Bukti</label>
 
-                                                    <input type="file" name="bukti_pengeluaran" class="form-control h-100" id="edit-bukti" accept="image/*,.pdf,.docx" >
+                                                    <input type="file" name="bukti_pengeluaran" class="form-control h-100" id="edit-bukti" accept="image/*,.pdf" >
                                                     <small style="color: grey">Klik atau tarik file untuk mengisi</small>
                                                 
                                                     <div style="color: red; display: none;" class="error-edit-bukti">

@@ -28,13 +28,35 @@ class HomeController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            $thisDay= Carbon::now()->format('Y-m-d');
-            $thisMonth = Carbon::now()->month;
-            $penerimaanDaily = IncomingCash::whereDate('paid_date', $thisDay)->get()->sum('total');
-            $pengeluaranDaily = OutgoingCash::whereDate('outgoing_date', $thisDay)->get()->sum('total');
-            $penerimaan = IncomingCash::whereMonth('paid_date', $thisMonth)->get()->sum('total');
-            $pengeluaran = OutgoingCash::whereMonth('outgoing_date', $thisMonth)->get()->sum('total');
-            return view('landing', compact('penerimaan', 'pengeluaran', 'penerimaanDaily', 'pengeluaranDaily'));
+            $acc_type_income = [
+                1 => 'kas',
+                2 => 'Pendapatan Kunjungan',
+                3 => 'Pendapatan Iklan',
+                4 => 'Perlengkapan',
+                5 => 'Peralatan',
+                6 => 'Pendapatan Liputan',
+                7 => 'Modal'
+            ];
+            $acc_type_outgoing = [
+                1 => "Beban Sewa",
+                2 => "Utang Usaha",
+                3 => "Utang Upah",
+                4 => "Prive",
+                5 => "Akumulasi Penyusutan",
+                6 => "Beban Air, Listrik, Dan Telepon",
+                7 => "Beban Peralatan",
+                8 => "Beban Administrasi"
+            ];
+            $thisYear = Carbon::now()->year;
+            $penerimaan = IncomingCash::whereYear('paid_date', $thisYear)->get()->sum('total');
+            $pengeluaran = OutgoingCash::whereYear('outgoing_date', $thisYear)->get()->sum('total');
+            $allIncome = IncomingCash::all()->groupBy('acc_type')->map(function ($group) {
+                return $group->sum('total');
+            });
+            $allOutgoing = OutgoingCash::all()->groupBy('acc_type')->map(function ($group) {
+                return $group->sum('total');
+            });
+            return view('landing', compact('penerimaan', 'pengeluaran', 'allIncome', 'allOutgoing', 'acc_type_income', 'acc_type_outgoing'));
         }
 
         return redirect('/login');
