@@ -37,8 +37,7 @@
                 <td colspan="2" class="text-center font-weight-bold title" style="background-color: rgba(220, 220, 220, 0.477)">
                     <h3>Bali TV</h3>
                     <h4>Laporan Laba / Rugi<h4>
-                        @php $yearMonth = $month[0].'-'.$month[1]  @endphp
-                            <p>Periode Yang Berakhir Pada {{ Carbon::parse($yearMonth)->translatedFormat('F Y') }}</p>
+                        <p>Periode {{ Carbon::parse($startDate)->translatedFormat('D, d F Y') . ' - ' . Carbon::parse($endDate)->translatedFormat('D, d F Y') }}</p>
                 </td>
             </tr>
         </thead>

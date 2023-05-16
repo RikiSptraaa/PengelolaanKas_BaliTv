@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\IncomingCash;
 use App\Models\OutgoingCash;
 use Illuminate\Http\Request;
@@ -23,11 +24,14 @@ class ReportController extends Controller
                 'message' => "Silahkan Pilih Bulan Terlebihdahulu"
             ], 400);
         }
-        $month = explode('-', $request['date']?? null);
+        $date = explode('-', request()->date);
+        $startDate = Carbon::createFromFormat('d/m/Y',trim($date[0]))->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('d/m/Y',trim($date[1]))->format('Y-m-d');
 
 
-        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
+
+        $acc_income = IncomingCash::whereBetween('paid_date', [$startDate, $endDate])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
 
 
         return response()->json([
@@ -36,7 +40,8 @@ class ReportController extends Controller
                 compact(
                     'acc_income',
                     'acc_outgoing',
-                    'month'
+                    'startDate', 
+                    'endDate'
                 )
             )->render(),
         ]);
@@ -44,16 +49,17 @@ class ReportController extends Controller
 
     public function printLaba(Request $request)
     {
-        // $date = $request->date == null ? date('Y-m-d') : $request->date;
-        $month = explode('-', $request['date']?? null);
+        $date = explode('-', request()->date);
+        $startDate = Carbon::createFromFormat('d/m/Y',trim($date[0]))->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('d/m/Y',trim($date[1]))->format('Y-m-d');
 
         $is_print = true;
 
-        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
+        $acc_income = IncomingCash::whereBetween('paid_date', [$startDate, $endDate])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
 
 
-        $pdf = Pdf::loadView('report.report-laba', compact('month', 'acc_income', 'acc_outgoing', 'is_print'));
+        $pdf = Pdf::loadView('report.report-laba', compact('startDate', 'endDate','acc_income', 'acc_outgoing', 'is_print'));
         return $pdf->stream('Laba.pdf');
     }
 
@@ -70,12 +76,14 @@ class ReportController extends Controller
             ], 400);
         }
 
-        $month = explode('-', $request['date']?? null);
+        $date = explode('-', request()->date);
+        $startDate = Carbon::createFromFormat('d/m/Y',trim($date[0]))->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('d/m/Y',trim($date[1]))->format('Y-m-d');
 
 
-        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
-
+        $acc_income = IncomingCash::whereBetween('paid_date', [$startDate, $endDate])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
+        
         $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
         $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                    
         $laba_bersih = $pendapatan - $beban;
@@ -86,7 +94,8 @@ class ReportController extends Controller
                 compact(
                     'acc_income',
                     'acc_outgoing',
-                    'month',
+                    'startDate', 
+                    'endDate',
                     'laba_bersih'
                 )
             )->render(),
@@ -94,24 +103,27 @@ class ReportController extends Controller
     }
     public function print_equity(Request $request)
     {
-        $month = explode('-', $request['date']?? null);
-        $date = $request->date == null ? date('Y-m-d') : $request->date;
+        $date = explode('-', request()->date);
+        $startDate = Carbon::createFromFormat('d/m/Y',trim($date[0]))->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('d/m/Y',trim($date[1]))->format('Y-m-d');
+
         $is_print = true;
 
-        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
+        $acc_income = IncomingCash::whereBetween('paid_date', [$startDate, $endDate])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
 
-        $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
-        $beban = collect($acc_outgoing)->where('acc_type', 1)->sum('total') ?? 0;                 
+        $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
+        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                 
         $laba_bersih = $pendapatan - $beban;
 
 
         $pdf = Pdf::loadView('report.report-equity', compact( 'acc_income',
         'acc_outgoing',
-        'month',
+        'startDate', 
+        'endDate',
         'laba_bersih',
         'is_print'));
-        return $pdf->stream('Perubahan Ekuitas '.$date.'.pdf');
+        return $pdf->stream('Perubahan Ekuitas '.$startDate.'-'.$endDate.'.pdf');
     }
 
     public function index_neraca(){
@@ -124,13 +136,23 @@ class ReportController extends Controller
                 'message' => "Silahkan Pilih Bulan Terlebihdahulu"
             ], 400);
         }
-        $month = explode('-', $request['date']?? null);
-
-        $date = $request->date == null ? date('Y-m-d') : $request->date;
+        $date = explode('-', request()->date);
+        $startDate = Carbon::createFromFormat('d/m/Y',trim($date[0]))->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('d/m/Y',trim($date[1]))->format('Y-m-d');
        
 
-        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
+     
+        $acc_income = IncomingCash::whereBetween('paid_date', [$startDate, $endDate])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
+
+        $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
+        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                 
+        $laba_bersih = $pendapatan - $beban;
+
+        $modal_awal = collect($acc_income)->whereIn('acc_type', 7 )->sum('total') ?? 0;
+        $prive = collect($acc_outgoing)->where('acc_type', 4)->sum('total');    
+        $penambahan_modal = $laba_bersih-$prive;
+        $modal_akhir = $modal_awal + $penambahan_modal;
 
         return response()->json([
             'report_view' => view(
@@ -138,7 +160,9 @@ class ReportController extends Controller
                 compact(
                     'acc_income',
                     'acc_outgoing',
-                    'month',
+                    'startDate',
+                    'endDate',
+                    'modal_akhir'
                 )
             )->render(),
         ]);
@@ -146,18 +170,30 @@ class ReportController extends Controller
     }
     public function print_neraca(Request $request)
     {
-        $month = explode('-', $request['date']?? null);
+        $date = explode('-', request()->date);
+        $startDate = Carbon::createFromFormat('d/m/Y',trim($date[0]))->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('d/m/Y',trim($date[1]))->format('Y-m-d');
 
-        $date = $request->date == null ? date('Y-m-d') : $request->date;
         $is_print = true;
 
-        $acc_income = IncomingCash::whereMonth('paid_date', $month[1])->whereYear('paid_date', $month[0])->get()->toArray();
-        $acc_outgoing = OutgoingCash::whereMonth('outgoing_date', $month[1])->whereYear('outgoing_date', $month[0])->get()->toArray();
+        $acc_income = IncomingCash::whereBetween('paid_date', [$startDate, $endDate])->get()->toArray();
+        $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
+
+        $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
+        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                 
+        $laba_bersih = $pendapatan - $beban;
+
+        $modal_awal = collect($acc_income)->whereIn('acc_type', 7 )->sum('total') ?? 0;
+        $prive = collect($acc_outgoing)->where('acc_type', 4)->sum('total');    
+        $penambahan_modal = $laba_bersih-$prive;
+        $modal_akhir = $modal_awal + $penambahan_modal;
 
         $pdf = Pdf::loadView('report.report-neraca', compact( 'acc_income',
         'acc_outgoing',
-        'month',
+        'startDate',
+        'endDate',
+        'modal_akhir',
         'is_print'));
-        return $pdf->stream('Laporan Neraca '.$date.'.pdf');
+        return $pdf->stream('Laporan Neraca '.$startDate.'-'.$endDate.'.pdf');
     }
 }

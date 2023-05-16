@@ -30,8 +30,7 @@
                 <td colspan="2" class="text-center font-weight-bold title" style="background-color: rgba(220, 220, 220, 0.477)">
                     <h3>Bali TV</h3>
                     <h4>Laporan Perubahan Equitas<h4>
-                        @php $yearMonth = $month[0].'-'.$month[1]  @endphp
-                        <p>Periode Yang Berakhir Pada {{ Carbon::parse($yearMonth)->translatedFormat('F Y') }}</p>
+                        <p>Periode {{ Carbon::parse($startDate)->translatedFormat('D, d F Y') . ' - ' . Carbon::parse($endDate)->translatedFormat('D, d F Y') }}</p>
                     {{-- <p>Periode Yang Berakhir Pada {{Carbon::parse($date)->format('F Y') }}</p> --}}
                 </td>
             </tr>
@@ -44,7 +43,7 @@
                 @php
                     use Akaunting\Money\Currency;
                     use Akaunting\Money\Money;
-                    $modal_awal = collect($acc_income)->whereIn('acc_type', 1 )->sum('total') ?? 0;
+                    $modal_awal = collect($acc_income)->whereIn('acc_type', 7 )->sum('total') ?? 0;
                     // $pendapatan = collect($acc_income)->where('acc_type', 2)->sum('total') ?? 0;
                     $prive = collect($acc_outgoing)->where('acc_type', 4)->sum('total');    
                     // $laba = $pendapatan - $beban;
