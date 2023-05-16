@@ -25,7 +25,6 @@ $acc_type = [
 4 => 'Perlengkapan',
 5 => 'Peralatan',
 6 => 'Pendapatan Liputan',
-7 => 'Modal'
 ]
 @endphp
 

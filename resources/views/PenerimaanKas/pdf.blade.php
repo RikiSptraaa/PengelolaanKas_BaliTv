@@ -40,8 +40,7 @@ $acc_type = [
 3 => 'Pendapatan Iklan',
 4 => 'Perlengkapan',
 5 => 'Peralatan',
-6 => 'Pendapatan Liputan',
-7 => 'Modal'
+6 => 'Pendapatan Liputan'
 ]
 
 @endphp
