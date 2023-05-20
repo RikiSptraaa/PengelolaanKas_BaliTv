@@ -21,7 +21,7 @@ class ReportController extends Controller
         if($request->date == null){
             return response()->json([
                 'status' => false,
-                'message' => "Silahkan Pilih Bulan Terlebihdahulu"
+                'message' => "Silahkan Pilih Tanggal Terlebihdahulu"
             ], 400);
         }
         $date = explode('-', request()->date);
@@ -72,7 +72,7 @@ class ReportController extends Controller
         if($request->date == null){
             return response()->json([
                 'status' => false,
-                'message' => "Silahkan Pilih Bulan Terlebihdahulu"
+                'message' => "Silahkan Pilih Tanggal Terlebihdahulu"
             ], 400);
         }
 
@@ -85,7 +85,7 @@ class ReportController extends Controller
         $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
         
         $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
-        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                    
+        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8,9,10])->sum('total') ?? 0;       
         $laba_bersih = $pendapatan - $beban;
 
         return response()->json([
@@ -113,7 +113,7 @@ class ReportController extends Controller
         $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
 
         $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
-        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                 
+        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8,9,10])->sum('total') ?? 0;                 
         $laba_bersih = $pendapatan - $beban;
 
 
@@ -133,7 +133,7 @@ class ReportController extends Controller
         if($request->date == null){
             return response()->json([
                 'status' => false,
-                'message' => "Silahkan Pilih Bulan Terlebihdahulu"
+                'message' => "Silahkan Pilih Tanggal Terlebihdahulu"
             ], 400);
         }
         $date = explode('-', request()->date);
@@ -146,7 +146,7 @@ class ReportController extends Controller
         $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
 
         $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
-        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                 
+        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8,9,10])->sum('total') ?? 0;                 
         $laba_bersih = $pendapatan - $beban;
 
         $modal_awal = collect($acc_income)->whereIn('acc_type', 7 )->sum('total') ?? 0;
@@ -180,7 +180,7 @@ class ReportController extends Controller
         $acc_outgoing = OutgoingCash::whereBetween('outgoing_date', [$startDate, $endDate])->get()->toArray();
 
         $pendapatan = collect($acc_income)->whereIn('acc_type', [2,3,6])->sum('total') ?? 0;
-        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8])->sum('total') ?? 0;                 
+        $beban = collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8,9,10])->sum('total') ?? 0;                 
         $laba_bersih = $pendapatan - $beban;
 
         $modal_awal = collect($acc_income)->whereIn('acc_type', 7 )->sum('total') ?? 0;

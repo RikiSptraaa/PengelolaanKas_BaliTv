@@ -28,7 +28,9 @@ $acc_type = [
 5 => "Akumulasi Penyusutan",
 6 => "Beban Air, Listrik, Dan Telepon",
 7 => "Beban Peralatan",
-8 => "Beban Administrasi"
+8 => "Beban Administrasi",
+9 => "Beban Lain-Lain",
+10 => 'Beban Konsumsi'
 ]
 @endphp
 
