@@ -3,7 +3,7 @@ use Carbon\Carbon;
 use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
 
-$kas = collect($acc_income)->whereIn('acc_type', [1,2,3,6])->sum('total') - collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8 ])->sum('total');
+$kas = collect($acc_income)->whereIn('acc_type', [1,2,3,6])->sum('total') - collect($acc_outgoing)->whereIn('acc_type', [1,6,7,8, 9, 10 ])->sum('total');
 @endphp
 @if(isset($is_print))
 <style>
