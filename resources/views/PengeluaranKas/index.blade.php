@@ -90,7 +90,7 @@ $acc_type = [
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Jenis Akun</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
-                                                Deskripsi</th>
+                                                Nama Karyawan</th>
                                             <th tabindex="0" rowspan="1" colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
                                                 Tanggal Pengeluaran
@@ -107,11 +107,12 @@ $acc_type = [
                                                 aria-label="Engine version: activate to sort column ascending">
                                                 Bukti
                                             </th>
-
+                                            @if(auth()->user()->is_super_admin == 1 OR auth()->user()->is_super_admin == 2 )
                                             <th tabindex="0" rowspan="1" colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
                                                 aksi
                                             </th>
+                                            @endif
 
                                         </tr>
                                     </thead>
@@ -146,8 +147,11 @@ $acc_type = [
                                                 </div>
                                                 @endif
                                             </td>
+                                            @if(auth()->user()->is_super_admin == 1 OR auth()->user()->is_super_admin == 2 )
                                             <td>
                                                 <div class="d-flex justify-content-center">
+                                                    
+                                                    @if(auth()->user()->is_super_admin == 2)                                                        
                                                     <form>
                                                         @csrf
                                                         @method('delete')
@@ -165,10 +169,12 @@ $acc_type = [
                                                         <i class='fas fa-edit edit-icon'
                                                             style="color: rgb(75, 111, 255);"></i>
                                                     </button>
+                                                    @endif
                                                     <a id="btn-download" data-toggle="tooltip" data-placement="top" title="Download/Unduh Bukti" class='margin-right text-center' href="{{ asset('bukti').'/'.$value->file }}" download > <i class='fas fa-download edit-icon'
                                                     style="color: rgb(75, 111, 255);"></i></a>
                                                 </div>
                                             </td>
+                                            @endif
                                         </tr>
                                         @endforeach
                                     </tbody>

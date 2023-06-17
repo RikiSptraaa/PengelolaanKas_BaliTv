@@ -85,7 +85,7 @@ $acc_type = [
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Jenis Akun</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
-                                                Deskripsi</th>
+                                                Nama Klien</th>
                                             <th tabindex="0" rowspan="1" colspan="1">
                                                 Tanggal Bayar</th>
                                             <th tabindex="0" rowspan="1" colspan="1"
@@ -100,10 +100,12 @@ $acc_type = [
                                                 aria-label="Engine version: activate to sort column ascending">
                                                 Bukti
                                             </th>
+                                            @if(auth()->user()->is_super_admin == 1 OR auth()->user()->is_super_admin == 2 )
                                             <th tabindex="0" rowspan="1" colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
                                                 Aksi
                                             </th>
+                                            @endif
 
                                         </tr>
                                     </thead>
@@ -126,25 +128,27 @@ $acc_type = [
                                                 @php
                                                     $fileExt = explode(".", $value->file);
                                                 @endphp
-                                                @if($fileExt[1] != 'pdf') 
-                                                <div class="text-center">
-                                                    <a data-magnify="gallery" data-src="" data-caption="Bukti" data-group="a" href="{{ asset('bukti').'/'.$value->file }}">
-                                                        <img src="{{ asset('bukti').'/'.$value->file }}" class="rounded img-thumbnail" alt="..." onclick="openFile({{ asset('bukti').'/'.$value->file }})">
-                                                    </a>
-                                                </div>
-                                                @else
-                                                <div class="text-center">
-                                                    <a href="{{ asset('bukti').'/'.$value->file }}" target="_blank">
-                                                        <button class="btn btn-sm btn-secondary">
-                                                            Perlihatkan File
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                                @endif
+                                                                                                    
+                                                    @if($fileExt[1] != 'pdf') 
+                                                    <div class="text-center">
+                                                        <a data-magnify="gallery" data-src="" data-caption="Bukti" data-group="a" href="{{ asset('bukti').'/'.$value->file }}">
+                                                            <img src="{{ asset('bukti').'/'.$value->file }}" class="rounded img-thumbnail" alt="..." onclick="openFile({{ asset('bukti').'/'.$value->file }})">
+                                                        </a>
+                                                    </div>
+                                                    @else
+                                                    <div class="text-center">
+                                                        <a href="{{ asset('bukti').'/'.$value->file }}" target="_blank">
+                                                            <button class="btn btn-sm btn-secondary">
+                                                                Perlihatkan File
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                    @endif
                                             </td>
+                                            @if(auth()->user()->is_super_admin == 1 OR auth()->user()->is_super_admin == 2 )
                                             <td>
                                                 <div class='d-flex justify-content-center'>
-                                                    
+                                                    @if(auth()->user()->is_super_admin == 2)                                                        
                                                     <form>
                                                         @csrf
                                                         @method('delete')
@@ -154,6 +158,7 @@ $acc_type = [
                                                             class='delete-btn mr-2 text-center'><i style='color: red;'
                                                                 class='fas fa-trash del-icon'></i></button>
                                                     </form>
+
                                                     <button class='edit-penerimaan-kas-btn margin-right text-center'
                                                         id="edit-user-btn" data-toggle="modal" data-target="#modal-update"
                                                         data-id="{{ $value->invoice_number }}"
@@ -161,11 +166,14 @@ $acc_type = [
                                                         <i class='fas fa-edit edit-icon'
                                                             style="color: rgb(75, 111, 255);"></i>
                                                     </button>
+                                                    @endif
+
                                                     <a id="btn-download" data-toggle="tooltip" data-placement="bottom" title="Download/Unduh Bukti" 
                                                     class='margin-right text-center' href="{{ asset('bukti').'/'.$value->file }}" download > <i class='fas fa-download edit-icon'
                                                         style="color: rgb(75, 111, 255);"></i></a>
                                                 </div>
                                             </td>
+                                            @endif
                                         </tr>
                                         @endforeach
                                     </tbody>

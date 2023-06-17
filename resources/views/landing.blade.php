@@ -103,6 +103,21 @@
                 </div>
             </div>
         </div>  
+        <div class="container">
+            <div class="card">
+                <div class="card-header border-0">
+                    <h3 class="card-title">Kasbon</h3>
+                </div>
+        
+                <div class="card-body d-flex justify-content-center">   
+                    <ul>
+                        <li>Kasbon BBM</li>
+                        <li>Kasbon Konsumsi</li>
+                    </ul>
+                                         
+                </div>
+            </div>
+        </div>  
        
     </div>
 </div>
