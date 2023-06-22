@@ -67,7 +67,14 @@
                     </div>
                     <small class="m-2">Selamat Datang Kembali,</small>
                     <h3 class="widget-user-username">{{ Auth::user()->name }}</h3>
-                    <h5 class="widget-user-desc">{{ Auth::user()->is_super_admin ? 'Kasir' : 'Pimpinan' }}</h5>
+                    @if(Auth::user()->is_super_admin == 1)
+                    
+                    <h5 class="widget-user-desc">Kasir</h5>
+                    @elseif(Auth::user()->is_super_admin == 2)
+                    <h5 class="widget-user-desc">Marketing</h5>
+                    @else
+                    <h5 class="widget-user-desc">Pimpinan</h5>
+                    @endif
                 </div>
             </div>
         </div>
