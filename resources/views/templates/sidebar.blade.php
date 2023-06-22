@@ -18,9 +18,10 @@
                 @if(Auth::user()->is_super_admin == 1)
 
                 <p class="text-sm d-block" style="color: white; margin: unset;">Kasir</p>
+                @elseif(Auth::user()->is_super_admin == 2)
+                <p class="text-sm d-block" style="color: white; margin: unset;">Marketing</p>
                 @else
                 <p class="text-sm d-block" style="color: white; margin: unset;">Pimpinan</p>
-
                 @endif
             </div>
         </div>
